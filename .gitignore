@@ -8,10 +8,10 @@ staging/
 .Rhistory
 .RData
 .Ruserdata
-#data
+data
 !data/.gitkeep
-#outputs
+outputs
 !outputs/.gitkeep
 _targets
-#docs
+docs
 !docs/.gitkeep
