@@ -12,6 +12,7 @@ library(here)
 library(rmarkdown)
 library(knitr)
 library(kableExtra)
+library(dplyr)
 
 
 ################################################################################
@@ -25,6 +26,17 @@ library(kableExtra)
 library(sf)
 library(spatialsampler)
 library(mapboxapi)
+
+
+################################################################################
+#
+#'
+#' Liberia-specific packages
+#'
+#
+################################################################################
+
+library(liberia)
 
 
 ################################################################################
