@@ -23,8 +23,8 @@ library(dplyr)
 #
 ################################################################################
 
-library(sf)
 library(spatialsampler)
+library(sf)
 library(mapboxapi)
 
 
