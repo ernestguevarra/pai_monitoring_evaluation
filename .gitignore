@@ -13,5 +13,4 @@ data
 outputs
 !outputs/.gitkeep
 _targets
-docs
-!docs/.gitkeep
+
