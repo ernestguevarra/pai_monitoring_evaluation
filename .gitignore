@@ -10,7 +10,7 @@ staging/
 .Ruserdata
 data
 !data/.gitkeep
-outputs
+#outputs
 !outputs/.gitkeep
 !outputs/urban_montserrado_sample.csv
 !outputs/grand_bassas_sample.csv
