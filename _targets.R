@@ -49,11 +49,15 @@ spatial_sample <- tar_plan(
     spatialsampler::get_nearest_point(
       data.x = "X", data.y = "Y", query = urban_montserrado_sp, n = 3
     ),
+  urban_montserrado_sample_map = urban_montserrado_ea |> 
+    subset(EFEACODE %in% urban_montserrado_sample$EFEACODE),
   grand_bassa_sample = grand_bassa_ea_centroids |>
     (\(x) cbind(data.frame(x), sf::st_coordinates(x)))() |>
     spatialsampler::get_nearest_point(
       data.x = "X", data.y = "Y", query = grand_bassa_sp, n = 3
-    )
+    ),
+  grand_bassa_sample_map = grand_bassa_ea |> 
+    subset(EFEACODE %in% grand_bassa_sample$EFEACODE)
 )
 
 ## Read raw data
