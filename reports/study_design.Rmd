@@ -120,9 +120,6 @@ urban_montserrado_sample |>
   )
 ```
 
-Download the Urban Montserrado enumeration area sampling list here.
-
-
 **Grand Bassa enumeration area sampling list**
 ```{r, echo = FALSE, eval = TRUE}
 grand_bassa_sample |>
@@ -136,8 +133,6 @@ grand_bassa_sample |>
     full_width = FALSE
   )
 ```
-
-Download the Grand Bassa enumeration area sampling list here.
 
 ### Second stage sample
 
