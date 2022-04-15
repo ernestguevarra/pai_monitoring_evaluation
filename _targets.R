@@ -85,10 +85,20 @@ outputs <- tar_plan(
     file = "outputs/urban_montserrado_sample.csv",
     row.names = FALSE
   ),
+  urban_montserrado_sample_xlsx = openxlsx::write.xlsx(
+    x = urban_montserrado_sample |> subset(select = -geometry), 
+    file = "outputs/urban_montserrado_sample.xlsx",
+    overwrite = TRUE
+  ),
   grand_bassa_sample_csv = write.csv(
     x = grand_bassa_sample,
     file = "outputs/grand_bassa_sample.csv",
     row.names = FALSE
+  ),
+  grand_bassa_sample_xlsx = openxlsx::write.xlsx(
+    x = grand_bassa_sample |> subset(select = -geometry),
+    file = "outputs/grand_bassa_sample.xlsx",
+    overwrite = TRUE
   )
 )
 

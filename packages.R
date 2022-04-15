@@ -13,6 +13,7 @@ library(rmarkdown)
 library(knitr)
 library(kableExtra)
 library(dplyr)
+library(openxlsx)
 
 
 ################################################################################
@@ -84,4 +85,4 @@ library(okapi)
 #
 ################################################################################
 
-library(DiagrammeR)
+#library(DiagrammeR)
