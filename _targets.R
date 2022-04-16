@@ -68,7 +68,7 @@ spatial_sample <- tar_plan(
       ),
       EFEACODE_key = EFEACODE
     ) |>
-    dplyr::select(-d) |>
+    dplyr::select(-d, -geometry) |>
     dplyr::rename(longitude = X, latitude = Y),
   grand_bassa_sample_reformat = grand_bassa_sample |>
     dplyr::mutate(
@@ -80,8 +80,11 @@ spatial_sample <- tar_plan(
       ),
       EFEACODE_key = EFEACODE
     ) |>
-    dplyr::select(-d) |>
-    dplyr::rename(longitude = X, latitude = Y)
+    dplyr::select(-d, -geometry) |>
+    dplyr::rename(longitude = X, latitude = Y),
+  sample_list = rbind(
+    urban_montserrado_sample_reformat, grand_bassa_sample_reformat
+  )
 )
 
 ## Read raw data
@@ -110,7 +113,7 @@ outputs <- tar_plan(
     row.names = FALSE
   ),
   urban_montserrado_sample_xlsx = openxlsx::write.xlsx(
-    x = urban_montserrado_sample_reformat |> subset(select = -geometry), 
+    x = urban_montserrado_sample_reformat, 
     file = "outputs/urban_montserrado_sample.xlsx",
     overwrite = TRUE
   ),
@@ -120,9 +123,18 @@ outputs <- tar_plan(
     row.names = FALSE
   ),
   grand_bassa_sample_xlsx = openxlsx::write.xlsx(
-    x = grand_bassa_sample_reformat |> subset(select = -geometry),
+    x = grand_bassa_sample_reformat,
     file = "outputs/grand_bassa_sample.xlsx",
     overwrite = TRUE
+  ),
+  sample_list_csv = write.csv(
+    x = sample_list,
+    file = "outputs/sample_list.csv",
+    row.names = FALSE
+  ),
+  sample_list_xlsx = openxlsx::write.xlsx(
+    x = sample_list,
+    file = "outputs/sample_list_xlsx"
   )
 )
 
