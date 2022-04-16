@@ -57,7 +57,31 @@ spatial_sample <- tar_plan(
       data.x = "X", data.y = "Y", query = grand_bassa_sp, n = 3
     ),
   grand_bassa_sample_map = grand_bassa_ea |> 
-    subset(EFEACODE %in% grand_bassa_sample$EFEACODE)
+    subset(EFEACODE %in% grand_bassa_sample$EFEACODE),
+  urban_montserrado_sample_reformat = urban_montserrado_sample |>
+    dplyr::mutate(
+      spid = paste0(
+        CCODE1, stringr::str_pad(spid, width = 2, side = "left", pad = "0")
+      ),
+      EFEACODE = stringr::str_pad(
+        EFEACODE, width = 10, side = "left", pad = "0"
+      ),
+      EFEACODE_key = EFEACODE
+    ) |>
+    dplyr::select(-d) |>
+    dplyr::rename(longitude = X, latitude = Y),
+  grand_bassa_sample_reformat = grand_bassa_sample |>
+    dplyr::mutate(
+      spid = paste0(
+        CCODE1, stringr::str_pad(spid, width = 2, side = "left", pad = "0")
+      ),
+      EFEACODE = stringr::str_pad(
+        EFEACODE, width = 10, side = "left", pad = "0"
+      ),
+      EFEACODE_key = EFEACODE
+    ) |>
+    dplyr::select(-d) |>
+    dplyr::rename(longitude = X, latitude = Y)
 )
 
 ## Read raw data
@@ -81,22 +105,22 @@ analysis <- tar_plan(
 ## Outputs
 outputs <- tar_plan(
   urban_montserrado_sample_csv = write.csv(
-    x = urban_montserrado_sample, 
+    x = urban_montserrado_sample_reformat, 
     file = "outputs/urban_montserrado_sample.csv",
     row.names = FALSE
   ),
   urban_montserrado_sample_xlsx = openxlsx::write.xlsx(
-    x = urban_montserrado_sample |> subset(select = -geometry), 
+    x = urban_montserrado_sample_reformat |> subset(select = -geometry), 
     file = "outputs/urban_montserrado_sample.xlsx",
     overwrite = TRUE
   ),
   grand_bassa_sample_csv = write.csv(
-    x = grand_bassa_sample,
+    x = grand_bassa_sample_reformat,
     file = "outputs/grand_bassa_sample.csv",
     row.names = FALSE
   ),
   grand_bassa_sample_xlsx = openxlsx::write.xlsx(
-    x = grand_bassa_sample |> subset(select = -geometry),
+    x = grand_bassa_sample_reformat |> subset(select = -geometry),
     file = "outputs/grand_bassa_sample.xlsx",
     overwrite = TRUE
   )
