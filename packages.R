@@ -51,6 +51,7 @@ library(liberia)
 
 library(ruODK)
 library(okapi)
+library(robotoolbox)
 
 
 ################################################################################
@@ -61,28 +62,7 @@ library(okapi)
 #
 ################################################################################
 
-#library(zscorer)
-#library(nutricheckr)
-#library(anthrocheckr)
+library(zscorer)
+library(nutricheckr)
+library(anthrocheckr)
 
-
-################################################################################
-#
-#'
-#' Poverty Probability Index (PPI) data analysis package
-#'
-#
-################################################################################
-
-#library(ppitables)
-
-
-################################################################################
-#
-#'
-#' Utility packages
-#'
-#
-################################################################################
-
-#library(DiagrammeR)
