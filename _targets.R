@@ -90,6 +90,27 @@ spatial_sample <- tar_plan(
 )
 
 
+## Survey training data
+survey_training <- tar_plan(
+  std_data = read.csv("data/standardisation_test_data.csv"),
+  std_outliers = std_data |>
+    dplyr::group_by(child_id) |>
+    dplyr::summarise(
+      height_outliers = nipnTK::outliersUV(height),
+      muac_outliers = nipnTK::outliersUV(muac)
+    ),
+  pilot_data_id = get_kobo_form_id(
+    form_name = "Product Access Initiative Monitoring and Evaluation Survey Form"
+  ),
+  pilot_data = get_kobo_data(form_id = pilot_data_id),
+  pilot_median_interview_time = pilot_data |>
+    dplyr::mutate(
+      start = strptime(start, format = "%Y-%m-%dT%H:%M:%S"),
+      end = strptime(end, format = "%Y-%m-%dT%H:%M:%S")
+    ) |>
+    (\(x) median(x$end - x$start))()
+)
+
 ## Read raw data
 data_raw <- tar_plan(
   
@@ -320,6 +341,12 @@ reports <- tar_plan(
     path = "reports/study_design.Rmd",
     output_dir = "docs",
     knit_root_dir = here::here()
+  ),
+  tar_render(
+    name = standardisation_test_results,
+    path = "reports/standardisation_test_results.Rmd",
+    output_dir = "docs",
+    knit_root_dir = here::here()
   )
 )
 
@@ -335,6 +362,7 @@ set.seed(1977)
 list(
   spatial_sample,
   data_raw,
+  survey_training,
   data_checks,
   data_processed,
   analysis,
