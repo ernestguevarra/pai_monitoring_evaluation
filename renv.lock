@@ -1679,8 +1679,8 @@
       "RemoteUsername": "dickoa",
       "RemoteRepo": "robotoolbox",
       "RemoteRef": "master",
-      "RemoteSha": "3208500187c6ce1ebbe21f11791b08d73741a5de",
-      "Hash": "09720cf935334d666fac2b58779a490e",
+      "RemoteSha": "e45f69ff9ac9a94c795dbc49827fb4fa8240fd99",
+      "Hash": "6dbb35d7213c3fb4acd800a7eb212675",
       "Requirements": [
         "RcppSimdJson",
         "crul",
