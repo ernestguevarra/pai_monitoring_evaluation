@@ -1,0 +1,202 @@
+---
+title: "Standardisation Test Results"
+author: 
+date: "20/04/2022"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    self_contained: true
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  error = FALSE,
+  echo = FALSE
+)
+
+suppressPackageStartupMessages(source("packages.R"))
+for (f in list.files(here::here("R"), full.names = TRUE)) source (f)
+
+targets::tar_load(c(std_data, std_outliers))
+```
+
+## Introduction
+
+As part of the training of enumerators for the Product Access Initiative (PAI) project baseline coverage survey, an anthropometric standardisation test was conducted on the 20th of April 2022. A total of 24 enumerators took the test. Each enumerator measured the height and mid-upper arm circumference of 10 children once.
+
+We analysed the measurements performed by the enumerators using metrics described by Ulijaszek and Kerr (1999). However, since only one set of measurements per enumerator per child was possible for this test, not all performance metrics could be performed. Of those that we present below, these results should be taken more as guidance for more focused support and training for the enumerators rather than a true picture of their capabilities.
+
+## Summary metrics of height and MUAC measurements
+
+Following are the summary metrics of height and MUAC measurements per child
+
+```{r, echo = FALSE}
+## Calculate the summary metrics of measurements per child (i.e., summary
+## measures of measurements made per child by each enumerator)
+std_data_summary <- std_data |>
+  dplyr::select(-round) |>
+  dplyr::group_by(child_id) |>
+  dplyr::summarise(
+    mean_height = mean(height),
+    median_height = median(height),
+    sd_height = sd(height),
+    iqr_height = IQR(height),
+    mean_muac = mean(muac),
+    median_muac = median(muac),
+    sd_muac = sd(muac),
+    iqr_muac = IQR(muac)
+  ) 
+
+std_data_summary |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Child ID", "Mean", "Median", "SD", "IQR", "Mean", "Median", "SD", "IQR")
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Height" = 4, "MUAC" = 4),
+    bold = TRUE, align = "c"
+  )
+```
+
+## Detecting outlier measurements per child
+
+```{r, echo = FALSE, fig.cap = "Boxplots of height measurements by enumerators per child", fig.height = 5, fig.width = 8, fig.align = "center"}
+boxplot(height ~ child_id, data = std_data)
+```
+
+
+```{r, echo = FALSE, fig.cap = "Boxplots of height measurements by enumerators per child", fig.height = 5, fig.width = 8, fig.align = "center"}
+boxplot(muac ~ child_id, data = std_data)
+```
+
+Following is a table of outlier height measurements performed by the enumerators:
+
+```{r, echo = FALSE}
+## Height measurement outliers
+std_data[std_outliers$height_outliers, ] |>
+  (\(x) data.frame(table(x$enumerator_id)))() |>
+  (\(x) { names(x) <- c("enumerator_id", "n_outliers"); x })() |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Enumerator ID", "Number of outlier measurements")
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE
+  )
+```
+
+Following is a table of outlier MUAC measurements performed by the enumerators:
+
+```{r, echo = FALSE}
+## MUAC measurement outliers
+std_data[std_outliers$muac_outliers, ] |>
+  (\(x) data.frame(table(x$enumerator_id)))() |>
+  (\(x) { names(x) <- c("enumerator_id", "n_outliers"); x })() |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Enumerator ID", "Number of outlier measurements")
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE
+  )
+```
+
+## Measurement bias
+
+We calculated measurement bias by getting the difference of an enumerator's measurement of a child against the median of all the measurements for that child. We then got the mean of the measurement bias estimates for an enumerator per child measured to get overall measurement bias per enumerator. This was taken as a rough measure of an enumerator's measurement accuracy.
+
+For height, we classified each enumerator on their measurement bias for height based on the following cut-off values:
+
+```{r, echo = FALSE}
+height_bias_value <- c(
+  "less than 0.4", "0.4 up to less than 0.6", 
+  "0.6 up to less than 1.4", "1.4 and greater"
+)
+
+height_bias_class <- c("good", "acceptable", "poor", "reject")
+
+muac_bias_value <- c(
+  "less than 0.1", "0.1 up to less than 0.2", 
+  "0.2 up to less than 0.3", "0.3 and greater"
+)
+
+muac_bias_class <- c("good", "acceptable", "poor", "reject")
+
+bias_df <- data.frame(
+  height_bias_value, height_bias_class, muac_bias_value, muac_bias_class
+) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Range of bias values", "Classification", 
+                  "Range of bias values", "Classification")
+  ) |>
+  kableExtra::add_header_above(
+    header = c("Height" = 2, "MUAC" = 2),
+    bold = TRUE, align = "c"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE
+  )
+```
+
+Following are the results for each enumerator for measurement bias:
+
+```{r, echo = FALSE}
+measurement_bias <- dplyr::left_join(
+  std_data,
+  std_data_summary |>
+    subset(select = c(child_id, mean_height, median_height, mean_muac, median_muac)),
+  by = "child_id"
+) |>
+  dplyr::mutate(
+    bias_height = abs(height - median_height),
+    bias_muac = abs(muac - median_muac)
+  ) |>
+  dplyr::group_by(enumerator_id) |>
+  dplyr::summarise(
+    mean_bias_height = mean(bias_height),
+    mean_bias_height_class = cut(
+      mean_bias_height,
+      breaks = c(0, 0.4, 0.6, 1.4, Inf),
+      include.lowest = TRUE, right = FALSE,
+      labels = c("good", "acceptable", "poor", "rejected")
+    ),
+    mean_bias_muac = mean(bias_muac),
+    mean_bias_muac_class = cut(
+      mean_bias_muac,
+      breaks = c(0, 0.1, 0.2, 0.3, Inf),
+      include.lowest = TRUE, right = FALSE,
+      labels = c("good", "acceptable", "poor", "rejected")
+    )
+  ) 
+
+measurement_bias |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c(
+      "Enumerator ID", "Mean Bias", "Classification", "Mean Bias", "Classification"
+    )
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Height" = 2, "MUAC" = 2),
+    bold = TRUE, align = "c"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE
+  )
+```
+
+<br/>
+<br/>
