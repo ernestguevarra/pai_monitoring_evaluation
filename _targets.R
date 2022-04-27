@@ -92,7 +92,8 @@ spatial_sample <- tar_plan(
 
 ## Survey training data
 survey_training <- tar_plan(
-  std_data = read.csv("data/standardisation_test_data.csv"),
+  std_data_id = get_googlesheets_id(filename = "standardisation_test_data"), 
+  std_data = get_googlesheets(id = std_data_id),
   std_outliers = std_data |>
     dplyr::group_by(child_id) |>
     dplyr::summarise(
