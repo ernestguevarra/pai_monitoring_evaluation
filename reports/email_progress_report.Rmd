@@ -1,0 +1,28 @@
+---
+title: CMAM Coverage S3M Survey Progress Report
+output: blastula::blastula_email
+---
+
+Please find attached the daily survey progress report for the **CMAM coverage S3M for `r Sys.Date()`**.
+
+The attached report is in HTML format and can be viewed/opened on any browser installed on your computer (with no need for internet access).
+
+You can view the same report online at https://ernest.guevarra.io/pai_monitoring_evaluation/survey_progress_report.html
+
+You can view previous daily reports from the archive as far back as **2022-05-11**. The links to previous reports can be found below:
+
+```{r, echo = FALSE}
+base_url <- "https://ernest.guevarra.io/pai_monitoring_evaluation/"
+
+archive_dates <- seq(from = as.Date("2022-05-11"), to = Sys.Date(), by = "days")
+
+archive_links <- paste0(base_url, archive_dates, "/progress") |>
+  paste(collapse = "\n")
+
+cat(archive_links)
+```
+
+```
+
+Best,    
+Ernest

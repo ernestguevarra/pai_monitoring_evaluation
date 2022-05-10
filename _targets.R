@@ -275,15 +275,36 @@ reports <- tar_plan(
   ),
   tar_render(
     name = survey_progress_report,
-    path = "reports/survey_progress.Rmd",
-    output_dir = "docs",
+    path = "reports/survey_progress_report.Rmd",
+    output_dir = "outputs",
     knit_root_dir = here::here()
+  ),
+  ## Archive survey progress report
+  survey_progress_report_archive = archive_progress_report(
+    from = survey_progress_report[1]
+  ),
+  email_progress_message = blastula::render_email(
+    input = "reports/email_progress_report.Rmd"
   )
 )
 
 ## Deploy targets
 deploy <- tar_plan(
   ##
+  survey_progress_deployed = deploy_progress_report(
+    from = survey_progress_report[1],
+    to = "docs/survey_progress_report.html"
+  ),
+  survey_progress_archive_deployed = archive_progress_report(
+    from = survey_progress_deployed,
+    to = paste0("docs/", Sys.Date(), "/progress/index.html")
+  ),
+  progress_report_emailed = email_progress_report(
+    message = email_progress_message,
+    attachment = survey_progress_report[1],
+    sender = Sys.getenv("GMAIL_USERNAME"),
+    recipient = eval(parse(text = Sys.getenv("REPORT_RECIPIENTS")))
+  )
 )
 
 ## Set seed
