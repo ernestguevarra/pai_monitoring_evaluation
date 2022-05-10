@@ -14,6 +14,7 @@ library(knitr)
 library(kableExtra)
 library(dplyr)
 library(openxlsx)
+library(ggplot2)
 
 
 ################################################################################
