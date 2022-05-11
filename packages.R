@@ -68,5 +68,5 @@ library(robotoolbox)
 
 library(zscorer)
 library(nutricheckr)
-library(anthrocheckr)
+#library(anthrocheckr)
 
