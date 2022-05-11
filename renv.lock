@@ -158,6 +158,21 @@
       "Hash": "4f57884290cc75ab22f4af9e9d4ca862",
       "Requirements": []
     },
+    "anthrocheckr": {
+      "Package": "anthrocheckr",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "nutriverse",
+      "RemoteRepo": "anthrocheckr",
+      "RemoteRef": "master",
+      "RemoteSha": "7814074a680a4ef056ef846ba2e5cf8dcd73ee97",
+      "Hash": "12ca0394dd1922da4486ac7472e6df98",
+      "Requirements": [
+        "shiny"
+      ]
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.1",
