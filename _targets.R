@@ -134,8 +134,14 @@ data_raw <- tar_plan(
   raw_data_id = get_kobo_form_id(
     form_name = "Product Access Initiative Monitoring and Evaluation Survey Form (MUAC only)"
   ),
-  raw_data = get_kobo_data(form_id = raw_data_id) |>
-    subset(as.Date(today) >= as.Date("2022-05-10"))
+  tar_target(
+    name = raw_data,
+    command = get_kobo_data(form_id = raw_data_id) |>
+      subset(as.Date(today) >= as.Date("2022-05-10")),
+    cue = tar_cue(mode = "always")
+  )#,
+  #raw_data = get_kobo_data(form_id = raw_data_id) |>
+  #  subset(as.Date(today) >= as.Date("2022-05-10"))
 )
 
 
