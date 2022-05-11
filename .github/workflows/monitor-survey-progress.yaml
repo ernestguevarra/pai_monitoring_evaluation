@@ -1,16 +1,18 @@
-name: run S3M workflow
+name: monitor survey progress
 
 on:
   # push:
   #   branches: [main, master]
   # pull_request:
   #   branches: [main, master]
+  schedule:
+    - cron: "0 17 * * *"
   workflow_dispatch:
-    branches:
-      - '*'
+    #branches:
+    #  - '*'
 
 jobs:
-  run-S3M-workflow:
+  monitor-survey-progress:
     runs-on: ubuntu-latest
     container: rocker/geospatial:4.2.0
     env:
@@ -44,8 +46,26 @@ jobs:
           renv::restore()
         shell: Rscript {0}
         
-      - name: Run workflow
+      - name: Run daily survey progress review
         run: |
-          targets::tar_make(study_design_report)
+          targets::tar_make(survey_progress_deployed)
         shell: Rscript {0}
+          
+      - name: Archive daily survey progress review
+        run: |
+          targets::tar_make(survey_progress_archive_deployed)
+        shell: Rscript {0}
+        
+      - name: Email report
+        run: |
+          targets::tar_make(progress_report_emailed)
+        shell: Rscript {0}
+        
+      - name: Commit and push files
+        run: |
+          git config --global user.email "ernest@guevarra.io"
+          git config --global user.name "ernestguevarra"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "deploy survey progress report"
+          git push
           

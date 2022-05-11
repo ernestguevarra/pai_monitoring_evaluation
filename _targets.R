@@ -109,178 +109,102 @@ survey_training <- tar_plan(
       start = strptime(start, format = "%Y-%m-%dT%H:%M:%S"),
       end = strptime(end, format = "%Y-%m-%dT%H:%M:%S")
     ) |>
-    (\(x) median(x$end - x$start))()
+    (\(x) median(x$end - x$start))(),
+  ea_assignment_grand_bassa_file = download_googledrive(
+    filename = "grand_bassa_sample.xlsx",
+    overwrite = TRUE
+  ),
+  ea_assignment_grand_bassa = get_ea_assignment_grand_bassa(
+    path = ea_assignment_grand_bassa_file$local_path
+  ),
+  ea_assignment_urban_montserrado_file = download_googledrive(
+    filename = "urban_montserrado_sample.xlsx",
+    overwrite = TRUE
+  ),
+  ea_assignment_urban_montserrado = get_ea_assignment_urban_montserrado(
+    path = ea_assignment_urban_montserrado_file$local_path
+  ),
+  ea_assignment = rbind(
+    ea_assignment_grand_bassa, ea_assignment_urban_montserrado
+  )
 )
 
 ## Read raw data
 data_raw <- tar_plan(
-  
+  raw_data_id = get_kobo_form_id(
+    form_name = "Product Access Initiative Monitoring and Evaluation Survey Form (MUAC only)"
+  ),
+  raw_data = get_kobo_data(form_id = raw_data_id) |>
+    subset(as.Date(today) >= as.Date("2022-05-10"))
 )
 
 
 ## Data checks
 data_checks <- tar_plan(
-  ## Tallies for survey progress
-  # table_sp_total = tally_sp_total(raw_data, selected_ea_complete),
-  # table_sp_date_total = tally_sp_date_total(
-  #   raw_data, selected_ea_complete
-  # ),
-  # table_team_total = tally_team_total(raw_data),
-  # table_team_date_total = tally_team_date_total(raw_data),
-  # check_ea_map = raw_data |>
-  #   subset(!is.na(spid)) |>
-  #   (\(x) x$ea_code)() |>
-  #   unique() |>
-  #   lapply(FUN = check_ea_geo, raw_data, complete_ea_sf),
-  # table_check_ea_map = raw_data |>
-  #   subset(!is.na(spid)) |>
-  #   (\(x) x$ea_code)() |>
-  #   unique() |>
-  #   lapply(FUN = check_ea, raw_data, complete_ea_sf) |>
-  #   dplyr::bind_rows() |>
-  #   (\(x) rbind(
-  #     x, 
-  #     data.frame(
-  #       ea = "Total", 
-  #       n_in = sum(x[ , 2]),
-  #       n_out = sum(x[ , 3]),
-  #       total = sum(x[ , 4])
-  #     )
-  #   ))(),
-  # table_check_ea_out = raw_data |>
-  #   subset(!is.na(spid)) |>
-  #   (\(x) x$ea_code)() |>
-  #   unique() |>
-  #   lapply(FUN = check_ea_table, raw_data, complete_ea_sf, check = "out") |>
-  #   dplyr::bind_rows(),
-  ## Detect univariate outliers for child anthropometric data
-  # outlier_weight = raw_data_clean|>
-  #   subset(age_months >= 6 & age < 60) |>
-  #   (\(x) x[outliersUV(x$cweight), ])(),
-  # outlier_height = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[outliersUV(x$cheight), ])(),
-  # outlier_muac = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[outliersUV(x$cmuac), ])(),
-  # outlier_weight_adj = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[outliersUV(x$cweight1), ])(),
-  # outlier_height_adj = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[outliersUV(x$cheight1), ])(),
-  # outlier_muac_adj = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[outliersUV(x$cmuac1), ])(),
-  # outlier_summary_univariate = summarise_univariate_outliers(
-  #   outlier_weight, outlier_height, outlier_muac
-  # ),
-  # outlier_table_univariate = tally_univariate_outliers(
-  #   outlier_weight, outlier_height, outlier_muac
-  # ),
-  # outlier_unique_univariate_total = tally_unique_univariate_outliers(
-  #   outlier_table_univariate, raw_data_clean
-  # ),
-  # outlier_summary_univariate_adj = summarise_univariate_outliers(
-  #   outlier_weight_adj, outlier_height_adj, outlier_muac_adj
-  # ),
-  # outlier_table_univariate_adj = tally_univariate_outliers_adj(
-  #   outlier_weight_adj, outlier_height_adj, outlier_muac_adj
-  # ),
-  # outlier_unique_univariate_total_adj = tally_unique_univariate_outliers(
-  #   outlier_table_univariate_adj, raw_data_clean
-  # ),
-  ## Detect bivariate outliers for child anthropometric data
-  # outlier_weight_height = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[with(x, outliersMD(cweight, cheight)), ])() |>
-  #   (\(x) x[!is.na(x$id), ])(),
-  # outlier_weight_muac = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[with(x, outliersMD(cweight, cmuac)), ])() |>
-  #   (\(x) x[!is.na(x$id), ])(),
-  # outlier_height_muac = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |> 
-  #   (\(x) x[with(x, outliersMD(cheight, cmuac)), ])() |>
-  #   (\(x) x[!is.na(x$id), ])(),
-  # outlier_weight_age = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[with(x, outliersMD(cweight, age_months)), ])() |>
-  #   (\(x) x[!is.na(x$id), ])(),
-  # outlier_height_age = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[with(x, outliersMD(cheight, age_months)), ])() |>
-  #   (\(x) x[!is.na(x$id), ])(),
-  # outlier_muac_age = raw_data_clean |>
-  #   subset(age_months >= 6 & age_months < 60) |>
-  #   (\(x) x[with(x, outliersMD(cmuac, age_months)), ])() |>
-  #   (\(x) x[!is.na(x$id), ])(),
-  # outlier_summary_bivariate = summarise_bivariate_outliers(
-  #   outlier_weight_height, outlier_weight_muac, outlier_height_muac,
-  #   outlier_weight_age, outlier_height_age, outlier_muac_age
-  # ),
-  # outlier_table_bivariate = tally_bivariate_outliers(
-  #   outlier_weight_height, outlier_weight_muac, outlier_height_muac,
-  #   outlier_weight_age, outlier_height_age, outlier_muac_age
-  # ),
-  # outlier_unique_bivariate_total = tally_unique_bivariate_outliers(
-  #   outlier_table_bivariate, raw_data_clean
-  # ),  
-  # outlier_unique_total = tally_total_unique_outliers(
-  #   outlier_table_bivariate,
-  #   outlier_table_bivariate,
-  #   raw_data_clean
-  # ),
-  ## Flag child anthropometric zscores
-  # child_data_zscore = raw_data_clean |>
-  #   subset(age_months < 60 & age_months >= 6) |>
-  #   calculate_zscore(),
-  # child_data_zscore_adj = raw_data_clean |>
-  #   subset(age_months < 60 & age_months >= 6) |>
-  #   calculate_zscore_adj(),
-  # flag_zscore_total = child_data_zscore |>
-  #   dplyr::filter(flag_zscore != 0) |>
-  #   nrow(),
-  # flag_zscore_prop = (flag_zscore_total / nrow(child_data_zscore)) |>
-  #   scales::percent(accuracy = 0.1),
-  # flag_zscore_adj_total = child_data_zscore_adj |>
-  #   dplyr::filter(flag_zscore != 0) |>
-  #   nrow(),
-  # flag_zscore_adj_prop = (flag_zscore_adj_total / nrow(child_data_zscore_adj)) |>
-  #   scales::percent(accuracy = 0.1),
-  ## Test for normality
-  # shapiro_wfaz = shapiro.test(x = child_data_zscore$wfaz),
-  # shapiro_hfaz = shapiro.test(x = child_data_zscore$hfaz),
-  # shapiro_wfhz = shapiro.test(x = child_data_zscore$wfhz),
-  ## Test skewness and kurtosis of child anthropometric zscores
-  # skewKurt_wfaz = child_data_zscore |>
-  #   (\(x) skewKurt(x$wfaz))(),
-  # skewKurt_hfaz = child_data_zscore |>
-  #   (\(x) skewKurt(x$hfaz))(),
-  # skewKurt_wfhz = child_data_zscore |>
-  #   (\(x) skewKurt(x$wfhz))(),
-  # whz_mad = with(
-  #   child_data_zscore |>
-  #     dplyr::filter(!flag_zscore %in% c(2, 3, 6, 7) | !is.na(flag_zscore), 
-  #                   oedema == 2, !is.na(wfhz)),
-  #   mad(wfhz)
-  # ),
-  ## Assess digit preference score
-  # dp_weight = with(child_data_zscore, digitPreference(cweight)),
-  # dp_height = with(child_data_zscore, digitPreference(cheight)),
-  # dp_muac = with(child_data_zscore, digitPreference(cmuac)),
-  ## Assess age heaping
-  # age_heaping = raw_data_clean |>
-  #   (\(x) ageHeaping(x$age_months))(),
-  # age_heaping_class = classify_age_heaping(age_heaping),
-  ## Assess sex ratio
-  # sex_ratio = raw_data_clean |> 
-  #   (\(x) sexRatioTest(x$sex, codes = c(1, 2), pop = c(1.03, 1)))(),
-  ## Assess age ratio
-  # age_ratio = raw_data_clean |>
-  #   (\(x) x$age_months[x$age_months >= 6 & x$age_months < 60])() |>
-  #   (\(x) x[!is.na(x)])() |>
-  #   (\(x) ageRatioTest(x = x, ratio = 0.85))()
+  team1_progress_table = create_table_team_progress(
+    raw_data, ea_assignment, survey_team = 1
+  ),
+  team2_progress_table = create_table_team_progress(
+    raw_data, ea_assignment, survey_team = 2
+  ),
+  team3_progress_table = create_table_team_progress(
+    raw_data, ea_assignment, survey_team = 3
+  ),
+  team4_progress_table = create_table_team_progress(
+    raw_data, ea_assignment, survey_team = 4
+  ),
+  team5_progress_table = create_table_team_progress(
+    raw_data, ea_assignment, survey_team = 5
+  ),
+  team6_progress_table = create_table_team_progress(
+    raw_data, ea_assignment, survey_team = 6
+  ),
+  team_progress_table = rbind(
+    team1_progress_table, team2_progress_table, team3_progress_table,
+    team4_progress_table, team5_progress_table, team6_progress_table
+  ),
+  team1_overall_median_survey_time = calculate_overall_median_survey_time(
+    raw_data |> subset(team == "1")
+  ),
+  team1_daily_median_survey_time = calculate_daily_median_survey_time(
+    raw_data |> subset(team == "1")
+  ),
+  team2_overall_median_survey_time = calculate_overall_median_survey_time(
+    raw_data |> subset(team == "2")
+  ),
+  team2_daily_median_survey_time = calculate_daily_median_survey_time(
+    raw_data |> subset(team == "2")
+  ),
+  team3_overall_median_survey_time = calculate_overall_median_survey_time(
+    raw_data |> subset(team == "3")
+  ),
+  team3_daily_median_survey_time = calculate_daily_median_survey_time(
+    raw_data |> subset(team == "3")
+  ),
+  team4_overall_median_survey_time = calculate_overall_median_survey_time(
+    raw_data |> subset(team == "4")
+  ),
+  team4_daily_median_survey_time = calculate_daily_median_survey_time(
+    raw_data |> subset(team == "4")
+  ),
+  team5_overall_median_survey_time = calculate_overall_median_survey_time(
+    raw_data |> subset(team == "5")
+  ),
+  team5_daily_median_survey_time = calculate_daily_median_survey_time(
+    raw_data |> subset(team == "5")
+  ),
+  team6_overall_median_survey_time = calculate_overall_median_survey_time(
+    raw_data |> subset(team == "6")
+  ),
+  team6_daily_median_survey_time = calculate_daily_median_survey_time(
+    raw_data |> subset(team == "6")
+  ),
+  team_overall_median_survey_time = calculate_overall_median_survey_time(
+    raw_data
+  ),
+  team_daily_median_survey_time = calculate_daily_median_survey_time(
+    raw_data
+  )
 )
 
 
@@ -348,12 +272,39 @@ reports <- tar_plan(
     path = "reports/standardisation_test_results.Rmd",
     output_dir = "docs",
     knit_root_dir = here::here()
+  ),
+  tar_render(
+    name = survey_progress_report,
+    path = "reports/survey_progress_report.Rmd",
+    output_dir = "outputs",
+    knit_root_dir = here::here()
+  ),
+  ## Archive survey progress report
+  survey_progress_report_archive = archive_progress_report(
+    from = survey_progress_report[1]
+  ),
+  email_progress_message = blastula::render_email(
+    input = "reports/email_progress_report.Rmd"
   )
 )
 
 ## Deploy targets
 deploy <- tar_plan(
   ##
+  survey_progress_deployed = deploy_progress_report(
+    from = survey_progress_report[1],
+    to = "docs/survey_progress_report.html"
+  ),
+  survey_progress_archive_deployed = archive_progress_report(
+    from = survey_progress_deployed,
+    to = paste0("docs/", Sys.Date(), "/progress/index.html")
+  ),
+  progress_report_emailed = email_progress_report(
+    message = email_progress_message,
+    attachment = survey_progress_report[1],
+    sender = Sys.getenv("GMAIL_USERNAME"),
+    recipient = eval(parse(text = Sys.getenv("REPORT_RECIPIENTS")))
+  )
 )
 
 ## Set seed
