@@ -11,9 +11,9 @@ create_table_team_progress <- function(raw_data, ea_assignment, survey_team) {
     subset(team == paste("Team", survey_team))
   
   y <- raw_data |>
-    #subset(team == as.character(survey_team))
+    subset(team == as.character(survey_team))
     #dplyr::filter(team == as.character(survey_team))
-    subset(to_character(team) == paste0("Survey team ", survey_team))
+    #subset(to_character(team) == paste0("Survey team ", survey_team))
 
   if (nrow(y) != 0) {
     y <- data.frame(
