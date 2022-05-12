@@ -57,8 +57,8 @@ team1_progress_table |>
   theme_minimal()
 ```
 
-**Team 1 overall median survey time:** `r team1_overall_median_survey_time` minutes    
-**Team 1 daily median survey time:** `r team1_daily_median_survey_time` minutes
+**Team 1 overall median survey time:** `r round(team1_overall_median_survey_time, 2)` minutes    
+**Team 1 daily median survey time:** `r round(team1_daily_median_survey_time, 2)` minutes
 
 ### Team 2
 
@@ -69,8 +69,8 @@ team2_progress_table |>
   theme_minimal()
 ```
 
-**Team 2 overall median survey time:** `r team2_overall_median_survey_time` minutes    
-**Team 2 daily median survey time:** `r team2_daily_median_survey_time` minutes
+**Team 2 overall median survey time:** `r round(team2_overall_median_survey_time, 2)` minutes    
+**Team 2 daily median survey time:** `r round(team2_daily_median_survey_time, 2)` minutes
 
 ### Team 3
 
@@ -81,8 +81,8 @@ team3_progress_table |>
   theme_minimal()
 ```
 
-**Team 3 overall median survey time:** `r team3_overall_median_survey_time` minutes    
-**Team 3 daily median survey time:** `r team3_daily_median_survey_time` minutes
+**Team 3 overall median survey time:** `r round(team3_overall_median_survey_time, 2)` minutes    
+**Team 3 daily median survey time:** `r round(team3_daily_median_survey_time, 2)` minutes
 
 ### Team 4
 
@@ -93,8 +93,8 @@ team4_progress_table |>
   theme_minimal()
 ```
 
-**Team 4 overall median survey time:** `r team4_overall_median_survey_time` minutes    
-**Team 4 daily median survey time:** `r team4_daily_median_survey_time` minutes
+**Team 4 overall median survey time:** `r round(team4_overall_median_survey_time, 2)` minutes    
+**Team 4 daily median survey time:** `r round(team4_daily_median_survey_time, 2)` minutes
 
 ### Team 5
 
@@ -105,8 +105,8 @@ team5_progress_table |>
   theme_minimal()
 ```
 
-**Team 5 overall median survey time:** `r team5_overall_median_survey_time` minutes    
-**Team 5 daily median survey time:** `r team5_daily_median_survey_time` minutes
+**Team 5 overall median survey time:** `r round(team5_overall_median_survey_time, 2)` minutes    
+**Team 5 daily median survey time:** `r round(team5_daily_median_survey_time, 2)` minutes
 
 ### Team 6
 
@@ -117,8 +117,8 @@ team6_progress_table |>
   theme_minimal()
 ```
 
-**Team 6 overall median survey time:** `r team6_overall_median_survey_time` minutes    
-**Team 6 daily median survey time:** `r team6_daily_median_survey_time` minutes
+**Team 6 overall median survey time:** `r round(team6_overall_median_survey_time, 2)` minutes    
+**Team 6 daily median survey time:** `r round(team6_daily_median_survey_time, 2)` minutes
 
 <br/>
 <br/>

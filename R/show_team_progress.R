@@ -12,7 +12,9 @@ create_table_team_progress <- function(raw_data, ea_assignment, survey_team) {
   
   y <- raw_data |>
     subset(team == as.character(survey_team))
-  
+    #dplyr::filter(team == as.character(survey_team))
+    #subset(to_character(team) == paste0("Survey team ", survey_team))
+
   if (nrow(y) != 0) {
     y <- data.frame(
       table(y$eid)
@@ -51,7 +53,7 @@ calculate_overall_median_survey_time <- function(raw_data) {
       start = strptime(start, format = "%Y-%m-%dT%H:%M:%S"),
       end = strptime(end, format = "%Y-%m-%dT%H:%M:%S")
     ) |>
-    (\(x) median(x$end - x$start))()
+    (\(x) median(x$end - x$start, na.rm = TRUE))()
 }
 
 
@@ -62,5 +64,5 @@ calculate_daily_median_survey_time <- function(raw_data) {
       start = strptime(start, format = "%Y-%m-%dT%H:%M:%S"),
       end = strptime(end, format = "%Y-%m-%dT%H:%M:%S")
     ) |>
-    (\(x) median(x$end - x$start))()
+    (\(x) median(x$end - x$start, na.rm = TRUE))()
 }
