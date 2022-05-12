@@ -52,8 +52,8 @@ team_progress_table |>
 
 ```{r, fig.align = "center", fig.height = 10}
 team1_progress_table |>
-  ggplot(mapping = aes(x = n, y = EFEACODE)) +
-  geom_col() +
+  ggplot(mapping = aes(x = n, y = EFEACODE, fill = Date)) +
+  geom_col(position = "stack", alpha = 0.7) +
   theme_minimal()
 ```
 
@@ -64,8 +64,8 @@ team1_progress_table |>
 
 ```{r, fig.align = "center", fig.height = 10}
 team2_progress_table |>
-  ggplot(mapping = aes(x = n, y = EFEACODE)) +
-  geom_col() +
+  ggplot(mapping = aes(x = n, y = EFEACODE, fill = Date)) +
+  geom_col(position = "stack", alpha = 0.7) +
   theme_minimal()
 ```
 
@@ -76,8 +76,8 @@ team2_progress_table |>
 
 ```{r, fig.align = "center", fig.height = 10}
 team3_progress_table |>
-  ggplot(mapping = aes(x = n, y = EFEACODE)) +
-  geom_col() +
+  ggplot(mapping = aes(x = n, y = EFEACODE, fill = Date)) +
+  geom_col(position = "stack", alpha = 0.7) +
   theme_minimal()
 ```
 
@@ -88,8 +88,8 @@ team3_progress_table |>
 
 ```{r, fig.align = "center", fig.height = 10}
 team4_progress_table |>
-  ggplot(mapping = aes(x = n, y = EFEACODE)) +
-  geom_col() +
+  ggplot(mapping = aes(x = n, y = EFEACODE, fill = Date)) +
+  geom_col(position = "stack", alpha = 0.7) +
   theme_minimal()
 ```
 
@@ -100,8 +100,8 @@ team4_progress_table |>
 
 ```{r, fig.align = "center", fig.height = 10}
 team5_progress_table |>
-  ggplot(mapping = aes(x = n, y = EFEACODE)) +
-  geom_col() +
+  ggplot(mapping = aes(x = n, y = EFEACODE, fill = Date)) +
+  geom_col(position = "stack", alpha = 0.7) +
   theme_minimal()
 ```
 
@@ -112,8 +112,8 @@ team5_progress_table |>
 
 ```{r, fig.align = "center", fig.height = 10}
 team6_progress_table |>
-  ggplot(mapping = aes(x = n, y = EFEACODE)) +
-  geom_col() +
+  ggplot(mapping = aes(x = n, y = EFEACODE, fill = Date)) +
+  geom_col(position = "stack", alpha = 0.7) +
   theme_minimal()
 ```
 

@@ -16,10 +16,16 @@ create_table_team_progress <- function(raw_data, ea_assignment, survey_team) {
     #subset(to_character(team) == paste0("Survey team ", survey_team))
 
   if (nrow(y) != 0) {
-    y <- data.frame(
-      table(y$eid)
-    ) |>
-      (\(x) { names(x) <- c("EFEACODE", "n"); x })()
+    y <- y |>
+      (\(x) table(x$today, x$eid))() |>
+      t() |>
+      data.frame() |>
+      (\(x) { names(x) <- c("EFEACODE", "Date", "n"); x })()
+    
+    # y <- data.frame(
+    #   table(y$today, y$eid)
+    # ) |>
+    #   (\(x) { names(x) <- c("EFEACODE", "n"); x })()
   
     xy <- merge(
       x, y,
