@@ -41,12 +41,19 @@ targets::tar_load(
 
 ## Survey progress per team
 
-```{r, eval = FALSE, fig.align = "center", fig.width = 16, fig.height = 30}
+```{r, eval = FALSE, fig.align = "center", fig.height = 60}
 team_progress_table |>
-  ggplot(mapping = aes(x = n, y = EFEACODE)) +
+  ggplot(mapping = aes(x = n, y = EFEACODE, fill = Date)) +
   geom_col() +
-  facet_wrap(. ~ team, ncol = 1, scales = "free_y")
+  facet_wrap(. ~ team, ncol = 1, scales = "free_y") +
+  theme_minimal() +
+  theme(
+    legend.position = "top",
+    strip.text = element_text(size = 20)
+  )
 ```
+
+The following bar plots show number of records/forms submitted by each team per enumeration area. Each bar plot indicates the day in which each record/form was started or initiated. These bar plots can be used to assess the number of enumeration areas teams and/or enuemrators are able to visit and start/initiate data collection within.
 
 ### Team 1
 
