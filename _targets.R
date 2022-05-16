@@ -140,7 +140,8 @@ data_raw <- tar_plan(
       subset(as.Date(today) >= as.Date("2022-05-10")) |>
       dplyr::mutate(
         eid = stringr::str_pad(eid, width = 10, side = "left", pad = "0")
-      ),
+      ) |>
+      subset(!is.na(team)),
     cue = tar_cue(mode = "always")
   )#,
   #raw_data = get_kobo_data(form_id = raw_data_id) |>
