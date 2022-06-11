@@ -142,6 +142,14 @@
         "Rcpp"
       ]
     },
+    "SnowballC": {
+      "Package": "SnowballC",
+      "Version": "0.7.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "bc26e07c0d747fd287c370fe355e7b85",
+      "Requirements": []
+    },
     "SparseM": {
       "Package": "SparseM",
       "Version": "1.81",
@@ -998,6 +1006,17 @@
         "openssl"
       ]
     },
+    "hunspell": {
+      "Package": "hunspell",
+      "Version": "3.0.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "3987784c19192ad0f2261c456d936df1",
+      "Requirements": [
+        "Rcpp",
+        "digest"
+      ]
+    },
     "ids": {
       "Package": "ids",
       "Version": "1.0.1",
@@ -1046,6 +1065,14 @@
       "Source": "Repository",
       "Repository": "RSPM",
       "Hash": "7ab57a6de7f48a8dc84910d1eca42883",
+      "Requirements": []
+    },
+    "janeaustenr": {
+      "Package": "janeaustenr",
+      "Version": "0.1.5",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "8b07a4b9d0a0d97d9fe12de8af6d219e",
       "Requirements": []
     },
     "janitor": {
@@ -2259,6 +2286,27 @@
         "vctrs"
       ]
     },
+    "tidytext": {
+      "Package": "tidytext",
+      "Version": "0.3.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "2bb4abb56a0287c2f3572434517ba2e9",
+      "Requirements": [
+        "Matrix",
+        "dplyr",
+        "generics",
+        "hunspell",
+        "janeaustenr",
+        "lifecycle",
+        "purrr",
+        "rlang",
+        "stringr",
+        "tibble",
+        "tokenizers",
+        "vctrs"
+      ]
+    },
     "tinytex": {
       "Package": "tinytex",
       "Version": "0.36",
@@ -2267,6 +2315,18 @@
       "Hash": "130fe4c61e55b271a2655b3a284a205f",
       "Requirements": [
         "xfun"
+      ]
+    },
+    "tokenizers": {
+      "Package": "tokenizers",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "a064f646b3a692e62dfb5d9ea690a4ea",
+      "Requirements": [
+        "Rcpp",
+        "SnowballC",
+        "stringi"
       ]
     },
     "triebeard": {
