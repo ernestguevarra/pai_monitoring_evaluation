@@ -184,7 +184,7 @@ interpolate_cmam <- function(cmam_sp, idp = 2, point_grid) {
 ################################################################################
 #
 #'
-#' Interpolate screening
+#' Interpolate screening indicators
 #'
 #
 ################################################################################

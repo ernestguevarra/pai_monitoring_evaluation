@@ -1,3 +1,11 @@
+################################################################################
+#
+#'
+#' Recode reasons for non-coverage
+#'
+#
+################################################################################
+
 recode_cmam_factors <- function(urban_montserrado_cmam_factors_df,
                                 grand_bassa_cmam_factors_df) {
   ## Factor 1: Does not recognise that child is sick
@@ -110,6 +118,14 @@ recode_cmam_factors <- function(urban_montserrado_cmam_factors_df,
 }
 
 
+################################################################################
+#
+#'
+#' Plot pareto chart of reasons for non-coverage - base
+#'
+#
+################################################################################
+
 plot_pareto_factors <- function(cmam_factors, main) {
   cmam_factors |>
     (\(x) x[rev(order(x[[2]])), ])() |>
@@ -126,6 +142,14 @@ plot_pareto_factors <- function(cmam_factors, main) {
     )()
 }
 
+
+################################################################################
+#
+#' 
+#' Plot pareto chart of reasons for non-coverage - ggplot
+#' 
+#
+################################################################################
 
 ggplot_pareto_factors <- function(cmam_factors) {
   cmam_factors |>

@@ -1,4 +1,10 @@
-
+################################################################################
+#
+#'
+#' Estimate screening coverage using binom.test
+#'
+#
+################################################################################
 
 estimate_screening_coverage <- function(urban_montserrado_screening_df,
                                         grand_bassa_screening_df) {
@@ -44,6 +50,14 @@ estimate_screening_coverage <- function(urban_montserrado_screening_df,
   screen_results
 }
 
+
+################################################################################
+#
+#'
+#' Estimate coverage indicators using binom.test
+#'
+#
+################################################################################
 
 estimate_cmam_coverage <- function(urban_montserrado_cmam_df,
                                    grand_bassa_cmam_df) {
@@ -115,3 +129,4 @@ estimate_cmam_coverage <- function(urban_montserrado_cmam_df,
   
   cmam_results
 }
+
