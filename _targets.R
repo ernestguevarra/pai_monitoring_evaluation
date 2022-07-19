@@ -246,6 +246,13 @@ data_processed <- tar_plan(
     data = urban_montserrado_cmam_df,
     proj4string = CRS(proj4string(urban_montserrado_int_grid))
   ),
+  urban_montserrado_vita_df = recode_vita(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_vita_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_vita_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_vita_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
   grand_bassa_screening_df = recode_screening(raw_data) |>
     subset(cid != "30"),
   grand_bassa_screening_sp = sp::SpatialPointsDataFrame(
@@ -261,6 +268,13 @@ data_processed <- tar_plan(
   grand_bassa_cmam_sp = sp::SpatialPointsDataFrame(
     coords = grand_bassa_cmam_df[ , c("longitude", "latitude")],
     data = grand_bassa_cmam_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  grand_bassa_vita_df = recode_vita(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_vita_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_vita_df[ , c("longitude", "latitude")],
+    data = grand_bassa_vita_df,
     proj4string = CRS(proj4string(grand_bassa_int_grid))
   )
 )
