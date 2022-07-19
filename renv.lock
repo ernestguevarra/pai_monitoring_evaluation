@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.2.0",
+    "Version": "4.2.1",
     "Repositories": [
       {
         "Name": "RSPM",
@@ -141,6 +141,14 @@
       "Requirements": [
         "Rcpp"
       ]
+    },
+    "SnowballC": {
+      "Package": "SnowballC",
+      "Version": "0.7.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bc26e07c0d747fd287c370fe355e7b85",
+      "Requirements": []
     },
     "SparseM": {
       "Package": "SparseM",
@@ -998,6 +1006,17 @@
         "openssl"
       ]
     },
+    "hunspell": {
+      "Package": "hunspell",
+      "Version": "3.0.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "3987784c19192ad0f2261c456d936df1",
+      "Requirements": [
+        "Rcpp",
+        "digest"
+      ]
+    },
     "ids": {
       "Package": "ids",
       "Version": "1.0.1",
@@ -1046,6 +1065,14 @@
       "Source": "Repository",
       "Repository": "RSPM",
       "Hash": "7ab57a6de7f48a8dc84910d1eca42883",
+      "Requirements": []
+    },
+    "janeaustenr": {
+      "Package": "janeaustenr",
+      "Version": "0.1.5",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "8b07a4b9d0a0d97d9fe12de8af6d219e",
       "Requirements": []
     },
     "janitor": {
@@ -1300,10 +1327,10 @@
     },
     "mapboxapi": {
       "Package": "mapboxapi",
-      "Version": "0.3.1",
+      "Version": "0.4",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "a7db6935e4ada4d2476072074416940d",
+      "Hash": "1cf3403f7845c15b9428e9649bac7dad",
       "Requirements": [
         "aws.s3",
         "curl",
@@ -1698,10 +1725,10 @@
     },
     "raster": {
       "Package": "raster",
-      "Version": "3.5-15",
+      "Version": "3.5-21",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "70cf51235e017702ed77427797572ef0",
+      "Hash": "2a312d1edc9253ed38245f586744216e",
       "Requirements": [
         "Rcpp",
         "sp",
@@ -1946,10 +1973,10 @@
     },
     "sf": {
       "Package": "sf",
-      "Version": "1.0-5",
+      "Version": "1.0-7",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "200bfddf8f0ca222a7edfd2d64425fb9",
+      "Hash": "d237b77320537f7793c7a4f83267cf50",
       "Requirements": [
         "DBI",
         "Rcpp",
@@ -2032,10 +2059,10 @@
     },
     "sp": {
       "Package": "sp",
-      "Version": "1.4-6",
+      "Version": "1.5-0",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "ce8613f4e8c84ef4da9eba65b874ebe9",
+      "Hash": "2a118bdd2db0a301711e0a9e3e3206d5",
       "Requirements": [
         "lattice"
       ]
@@ -2172,10 +2199,10 @@
     },
     "terra": {
       "Package": "terra",
-      "Version": "1.5-21",
+      "Version": "1.5-34",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "a713f0d9f9a2b68af112a991adbfe5d5",
+      "Hash": "c3401c4598d3c2d6158e10c966d70cbd",
       "Requirements": [
         "Rcpp"
       ]
@@ -2259,6 +2286,27 @@
         "vctrs"
       ]
     },
+    "tidytext": {
+      "Package": "tidytext",
+      "Version": "0.3.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "2bb4abb56a0287c2f3572434517ba2e9",
+      "Requirements": [
+        "Matrix",
+        "dplyr",
+        "generics",
+        "hunspell",
+        "janeaustenr",
+        "lifecycle",
+        "purrr",
+        "rlang",
+        "stringr",
+        "tibble",
+        "tokenizers",
+        "vctrs"
+      ]
+    },
     "tinytex": {
       "Package": "tinytex",
       "Version": "0.36",
@@ -2267,6 +2315,18 @@
       "Hash": "130fe4c61e55b271a2655b3a284a205f",
       "Requirements": [
         "xfun"
+      ]
+    },
+    "tokenizers": {
+      "Package": "tokenizers",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "a064f646b3a692e62dfb5d9ea690a4ea",
+      "Requirements": [
+        "Rcpp",
+        "SnowballC",
+        "stringi"
       ]
     },
     "triebeard": {

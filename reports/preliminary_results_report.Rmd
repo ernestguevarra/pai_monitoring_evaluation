@@ -1,0 +1,193 @@
+---
+title: "Baseline Survey Preliminary Results"
+author: "University of Liberia School of Public Health Research Team" 
+date: "2022-06-09"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    self_contained: true
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  error = FALSE,
+  echo = FALSE
+)
+
+suppressPackageStartupMessages(source("packages.R"))
+for (f in list.files(here::here("R"), full.names = TRUE)) source (f)
+
+targets::tar_load(
+  c(urban_montserrado, grand_bassa,
+    urban_montserrado_int_grid, grand_bassa_int_grid,
+    urban_montserrado_cmam_df, grand_bassa_cmam_df,
+    urban_montserrado_cmam_int, grand_bassa_cmam_int,
+    urban_montserrado_screening_df, grand_bassa_screening_df,
+    urban_montserrado_screening_int, grand_bassa_screening_int,
+    screening_estimates, cmam_estimates, cmam_factors
+  )
+)
+
+RdYlGn <- c("#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60", "#1a9850")
+
+get_div_colours <- colorRampPalette(colors = RdYlGn, space = "Lab")
+
+col_palette <- get_div_colours(n = 101)
+```
+
+<br/>
+
+## Anthropometric screening - MUAC
+
+```{r muac_screening, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_screening_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "muac_screen",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_screening_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "muac_screen",
+  col_palette = col_palette
+)
+```
+
+## Anthropometric screening - oedema
+
+```{r oedema_screening, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_screening_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "oedema_screen",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_screening_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "oedema_screen",
+  col_palette = col_palette
+)
+```
+
+```{r screening_table}
+screening_estimates |>
+  dplyr::mutate(
+    estimate_gm = scales::percent(estimate_gm, accuracy = 0.01),
+    lcl_gm = scales::percent(lcl_gm, accuracy = 0.01),
+    ucl_gm = scales::percent(ucl_gm, accuracy = 0.01),
+    estimate_gb = scales::percent(estimate_gb, accuracy = 0.01),
+    lcl_gb = scales::percent(lcl_gb, accuracy = 0.01),
+    ucl_gb = scales::percent(ucl_gb, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", 
+                  "Estimate", "95% LCL", "95% UCL", 
+                  "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+## CMAM Coverage
+
+```{r}
+cmam_estimates |>
+    dplyr::mutate(
+    estimate_gm = scales::percent(estimate_gm, accuracy = 0.01),
+    lcl_gm = scales::percent(lcl_gm, accuracy = 0.01),
+    ucl_gm = scales::percent(ucl_gm, accuracy = 0.01),
+    estimate_gb = scales::percent(estimate_gb, accuracy = 0.01),
+    lcl_gb = scales::percent(lcl_gb, accuracy = 0.01),
+    ucl_gb = scales::percent(ucl_gb, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", 
+                  "Estimate", "95% LCL", "95% UCL", 
+                  "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+### Case-finding effectiveness
+
+```{r case-finding, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_cmam_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "case_finding",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_cmam_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "case_finding",
+  col_palette = col_palette
+)
+```
+
+### Treatment coverage
+
+```{r treatment, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_cmam_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "treatment",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_cmam_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "treatment",
+  col_palette = col_palette
+)
+```
+
+### Reasons for non-coverage
+
+```{r out_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
+ggplot_pareto_factors(cmam_factors)
+```
+
+<br/>
+<br/>
