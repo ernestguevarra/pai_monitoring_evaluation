@@ -221,12 +221,146 @@ data_checks <- tar_plan(
 ## Process data
 data_processed <- tar_plan(
   ##
+  urban_montserrado_int_grid = rgdal::readOGR(
+    dsn = "https://github.com/validmeasures/liberiaData/blob/master/data-raw/maps/gmHexGrid.gpkg?raw=true"
+  ),
+  urban_montserrado_int_points = create_points(urban_montserrado_int_grid),
+  grand_bassa_int_grid = rgdal::readOGR(
+    dsn = "https://github.com/validmeasures/liberiaData/blob/master/data-raw/maps/gbHexGrid.gpkg?raw=true"
+  ),
+  grand_bassa_int_points = create_points(grand_bassa_int_grid),
+  urban_montserrado_screening_df = recode_screening(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_screening_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_screening_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_screening_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  urban_montserrado_cmam_df = recode_cmam(raw_data) |>
+    subset(cid == "30") |>
+    aggregate_cmam(),
+  urban_montserrado_cmam_factors_df = recode_cmam(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_cmam_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_cmam_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_cmam_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  urban_montserrado_vita_df = recode_vita(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_vita_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_vita_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_vita_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  urban_montserrado_mnp_df = recode_mnp(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_mnp_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_mnp_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_mnp_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  grand_bassa_screening_df = recode_screening(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_screening_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_screening_df[ , c("longitude", "latitude")],
+    data = grand_bassa_screening_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  grand_bassa_cmam_df = recode_cmam(raw_data) |>
+    subset(cid != "30") |>
+    aggregate_cmam(),
+  grand_bassa_cmam_factors_df = recode_cmam(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_cmam_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_cmam_df[ , c("longitude", "latitude")],
+    data = grand_bassa_cmam_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  grand_bassa_vita_df = recode_vita(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_vita_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_vita_df[ , c("longitude", "latitude")],
+    data = grand_bassa_vita_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  grand_bassa_mnp_df = recode_mnp(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_mnp_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_mnp_df[ , c("longitude", "latitude")],
+    data = grand_bassa_mnp_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  )
 )
 
 
 ## Analysis
 analysis <- tar_plan(
-  ##
+  ## Screening coverage
+  urban_montserrado_screening_int = interpolate_screening(
+    screening_sp = urban_montserrado_screening_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  grand_bassa_screening_int = interpolate_screening(
+    screening_sp = grand_bassa_screening_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  screening_estimates = estimate_screening_coverage(
+    urban_montserrado_screening_df, grand_bassa_screening_df
+  ),
+  ## CMAM coverage
+  urban_montserrado_cmam_int = interpolate_cmam(
+    cmam_sp = urban_montserrado_cmam_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_cmam_int = interpolate_cmam(
+    cmam_sp = grand_bassa_cmam_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  cmam_estimates = estimate_cmam_coverage(
+    urban_montserrado_cmam_df, grand_bassa_cmam_df
+  ),
+  cmam_factors = recode_cmam_factors(
+    urban_montserrado_cmam_factors_df, grand_bassa_cmam_factors_df
+  ),
+  ## Vitamin A
+  urban_montserrado_vita_int = interpolate_vita(
+    vita_sp = urban_montserrado_vita_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_vita_int = interpolate_vita(
+    vita_sp = grand_bassa_vita_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  vita_estimates = estimate_vita_coverage(
+    urban_montserrado_vita_df, grand_bassa_vita_df
+  ),
+  vita_factors = recode_vita_factors(
+    urban_montserrado_vita_df, grand_bassa_vita_df
+  ),
+  ## MNP
+  urban_montserrado_mnp_int = interpolate_mnp(
+    mnp_sp = urban_montserrado_mnp_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_mnp_int = interpolate_mnp(
+    mnp_sp = grand_bassa_mnp_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  mnp_estimates = estimate_mnp_coverage(
+    urban_montserrado_mnp_df, grand_bassa_mnp_df
+  ),
+  mnp_factors = recode_mnp_factors(
+    urban_montserrado_mnp_df, grand_bassa_mnp_df
+  )
 )
 
 
@@ -295,6 +429,12 @@ reports <- tar_plan(
   ),
   email_progress_message = blastula::render_email(
     input = "reports/email_progress_report.Rmd"
+  ),
+  tar_render(
+    name = preliminary_results_report,
+    path = "reports/preliminary_results_report.Rmd",
+    output_dir = "outputs",
+    knit_root_dir = here::here()
   )
 )
 
