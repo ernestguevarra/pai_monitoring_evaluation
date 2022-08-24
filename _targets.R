@@ -290,6 +290,34 @@ data_processed <- tar_plan(
     coords = grand_bassa_mnp_df[ , c("longitude", "latitude")],
     data = grand_bassa_mnp_df,
     proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  urban_montserrado_ifa_df = recode_ifa(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_ifa_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_ifa_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_ifa_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  grand_bassa_ifa_df = recode_ifa(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_ifa_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_ifa_df[ , c("longitude", "latitude")],
+    data = grand_bassa_ifa_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  urban_montserrado_icf_df = recode_icf(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_icf_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_icf_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_icf_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  grand_bassa_icf_df = recode_icf(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_icf_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_icf_df[ , c("longitude", "latitude")],
+    data = grand_bassa_icf_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
   )
 )
 
@@ -360,9 +388,41 @@ analysis <- tar_plan(
   ),
   mnp_factors = recode_mnp_factors(
     urban_montserrado_mnp_df, grand_bassa_mnp_df
-  )
+  ),
+  ## IFA coverage
+  urban_montserrado_ifa_int = interpolate_ifa(
+    ifa_sp = urban_montserrado_ifa_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_ifa_int = interpolate_ifa(
+    ifa_sp = grand_bassa_ifa_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  ifa_estimates = estimate_ifa_coverage(
+    urban_montserrado_ifa_df, grand_bassa_ifa_df
+  ),
+  ifa_factors = recode_ifa_factors(
+    urban_montserrado_ifa_df, grand_bassa_ifa_df
+  ),
   ## IYCF counselling coverage
-  
+  urban_montserrado_icf_int = interpolate_icf(
+    icf_sp = urban_montserrado_icf_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_icf_int = interpolate_icf(
+    icf_sp = grand_bassa_icf_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  icf_estimates = estimate_icf_coverage(
+    urban_montserrado_icf_df, grand_bassa_icf_df
+  ),
+  icf_factors = recode_icf_factors(
+    urban_montserrado_icf_df, grand_bassa_icf_df
+  )
 )
 
 

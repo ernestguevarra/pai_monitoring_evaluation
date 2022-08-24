@@ -250,3 +250,154 @@ estimate_mnp_coverage <- function(urban_montserrado_mnp_df,
   
   coverage_results
 }
+
+
+################################################################################
+#
+#'
+#' Estimate ifa coverage using binom.test
+#'
+#
+################################################################################
+
+estimate_ifa_coverage <- function(urban_montserrado_ifa_df,
+                                  grand_bassa_ifa_df) {
+  gm_ifa1_coverage <- binom.test(
+    x = c(table(urban_montserrado_ifa_df[["ifa1"]])[2],
+          table(urban_montserrado_ifa_df[["ifa1"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_ifa1_coverage <- binom.test(
+    x = c(table(grand_bassa_ifa_df[["ifa1"]])[2],
+          table(grand_bassa_ifa_df[["ifa1"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gm_ifa2_coverage <- binom.test(
+    x = c(table(urban_montserrado_ifa_df[["ifa2"]])[2],
+          table(urban_montserrado_ifa_df[["ifa2"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_ifa2_coverage <- binom.test(
+    x = c(table(grand_bassa_ifa_df[["ifa2"]])[2],
+          table(grand_bassa_ifa_df[["ifa2"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gm_ifa3_coverage <- binom.test(
+    x = c(table(urban_montserrado_ifa_df[["ifa3"]])[2],
+          table(urban_montserrado_ifa_df[["ifa3"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_ifa3_coverage <- binom.test(
+    x = c(table(grand_bassa_ifa_df[["ifa3"]])[2],
+          table(grand_bassa_ifa_df[["ifa3"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gm_ifa4_coverage <- binom.test(
+    x = c(table(urban_montserrado_ifa_df[["ifa4"]])[2],
+          table(urban_montserrado_ifa_df[["ifa4"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_ifa4_coverage <- binom.test(
+    x = c(table(grand_bassa_ifa_df[["ifa4"]])[2],
+          table(grand_bassa_ifa_df[["ifa4"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gm_ifa5_coverage <- binom.test(
+    x = c(table(urban_montserrado_ifa_df[["ifa5a"]])[2],
+          table(urban_montserrado_ifa_df[["ifa5a"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_ifa5_coverage <- binom.test(
+    x = c(table(grand_bassa_ifa_df[["ifa5a"]])[2],
+          table(grand_bassa_ifa_df[["ifa5a"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  
+  coverage_results <- data.frame(
+    "Indicators" = c(
+      "Attended ANC", 
+      "Received information on IFA", 
+      "Received IFA", 
+      "Consumed IFA",
+      "Consumed IFA at least 90 days"
+    ),
+    rbind(
+      c(gm_ifa1_coverage, gb_ifa1_coverage),
+      c(gm_ifa2_coverage, gb_ifa2_coverage),
+      c(gm_ifa3_coverage, gb_ifa3_coverage),
+      c(gm_ifa4_coverage, gb_ifa4_coverage),
+      c(gm_ifa5_coverage, gb_ifa5_coverage)
+    )
+  )
+  
+  row.names(coverage_results) <- NULL
+  names(coverage_results) <- c("indicators", 
+                               "gm_estimate", "gm_lcl", "gm_ucl", 
+                               "gb_estimate", "gb_lcl", "gb_ucl")
+  
+  coverage_results
+}
+
+
+################################################################################
+#
+#'
+#' Estimate icf coverage using binom.test
+#'
+#
+################################################################################
+
+estimate_icf_coverage <- function(urban_montserrado_icf_df,
+                                  grand_bassa_icf_df) {
+  gm_icf1_coverage <- binom.test(
+    x = c(table(urban_montserrado_icf_df[["icf1"]])[2],
+          table(urban_montserrado_icf_df[["icf1"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_icf1_coverage <- binom.test(
+    x = c(table(grand_bassa_icf_df[["icf1"]])[2],
+          table(grand_bassa_icf_df[["icf1"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gm_icf2_coverage <- binom.test(
+    x = c(table(urban_montserrado_icf_df[["icf2"]])[2],
+          table(urban_montserrado_icf_df[["icf2"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_icf2_coverage <- binom.test(
+    x = c(table(grand_bassa_icf_df[["icf2"]])[2],
+          table(grand_bassa_icf_df[["icf2"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  coverage_results <- data.frame(
+    "Indicators" = c(
+      "Heard about IYCF counselling", 
+      "Attended IYCF counselling"
+    ),
+    rbind(
+      c(gm_icf1_coverage, gb_icf1_coverage),
+      c(gm_icf2_coverage, gb_icf2_coverage)
+    )
+  )
+  
+  row.names(coverage_results) <- NULL
+  names(coverage_results) <- c("indicators", 
+                               "gm_estimate", "gm_lcl", "gm_ucl", 
+                               "gb_estimate", "gb_lcl", "gb_ucl")
+  
+  coverage_results
+}
