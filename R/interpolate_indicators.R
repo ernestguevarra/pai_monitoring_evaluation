@@ -375,3 +375,41 @@ interpolate_icf <- function(icf_sp, point_grid, idp = 2) {
   results_df
 }
 
+
+################################################################################
+#
+#'
+#' Interpolate anthro indicators
+#'
+#
+################################################################################
+
+interpolate_anthro <- function(anthro_sp, point_grid, idp = 2) {
+  
+  results_df <- data.frame(
+    matrix(
+      nrow = length(point_grid),
+      ncol = 4
+    )
+  )
+  
+  ##
+  names(results_df) <- names(anthro_sp)[9:12]
+  
+  ##
+  for(i in names(results_df)) {
+    currentIndicator <- anthro_sp[!is.na(anthro_sp[[i]]), ]
+    if(length(currentIndicator) != 0 ) {
+      temp <- gstat::idw(
+        formula = eval(parse(text = paste(i, "~", 1, sep = " "))),
+        locations = currentIndicator,
+        newdata = point_grid,
+        idp = idp
+      )
+      results_df[[i]] <- temp$var1.pred
+    }
+  }
+  
+  results_df
+}
+

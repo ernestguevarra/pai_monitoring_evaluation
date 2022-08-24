@@ -245,12 +245,13 @@
     },
     "bbw": {
       "Package": "bbw",
-      "Version": "0.1.3",
+      "Version": "0.2.0",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "9b0f8dc22bfe96e308f4b3217f2af247",
+      "Hash": "a01ae1002a372f021b4283cf6b9a92c5",
       "Requirements": [
-        "car"
+        "car",
+        "withr"
       ]
     },
     "bit": {

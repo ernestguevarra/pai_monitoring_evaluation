@@ -100,3 +100,27 @@ plot_interpolation <- function(interpolation,
   
   plot(sf::st_geometry(base_map), add = TRUE)
 }
+
+
+plot_anthro <- function(interpolation, 
+                        base_grid, 
+                        base_map, 
+                        var, 
+                        seq_palette) {
+  x <- cut(
+    x = interpolation[[var]],
+    breaks = quantile(
+      interpolation[[var]], 
+      probs = seq(from = 0, to = 1, by = 0.01)
+    ),
+    labels = FALSE
+  )
+  
+  sp::plot(
+    base_grid, 
+    col = seq_palette[x], 
+    border = seq_palette[x]
+  )
+  
+  plot(sf::st_geometry(base_map), add = TRUE)
+}

@@ -34,6 +34,7 @@ library(spatialsampler)
 library(mapboxapi)
 library(googledrive)
 library(googlesheets4)
+library(bbw)
 
 
 ################################################################################

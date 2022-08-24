@@ -1,0 +1,714 @@
+---
+title: "Baseline Survey Final Results"
+author: "University of Liberia School of Public Health Research Team" 
+date: "2022-08-25"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    self_contained: true
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  error = FALSE,
+  echo = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = here::here("figures/")
+)
+
+suppressPackageStartupMessages(source("packages.R"))
+for (f in list.files(here::here("R"), full.names = TRUE)) source (f)
+
+targets::tar_load(
+  c(urban_montserrado, grand_bassa,
+    urban_montserrado_int_grid, grand_bassa_int_grid,
+    urban_montserrado_cmam_df, grand_bassa_cmam_df,
+    urban_montserrado_cmam_int, grand_bassa_cmam_int,
+    urban_montserrado_screening_df, grand_bassa_screening_df,
+    urban_montserrado_screening_int, grand_bassa_screening_int,
+    screening_estimates, screening_bootstraps,
+    cmam_estimates, cmam_factors,
+    urban_montserrado_vita_df, grand_bassa_vita_df,
+    urban_montserrado_vita_int, grand_bassa_vita_int,
+    vita_estimates, vita_bootstraps, vita_factors,
+    urban_montserrado_mnp_df, grand_bassa_mnp_df,
+    urban_montserrado_mnp_int, grand_bassa_mnp_int,
+    mnp_estimates, mnp_bootstraps, mnp_factors,
+    urban_montserrado_ifa_df, grand_bassa_ifa_df,
+    urban_montserrado_ifa_int, grand_bassa_ifa_int,
+    ifa_estimates, ifa_bootstraps, ifa_factors,
+    urban_montserrado_icf_df, grand_bassa_icf_df,
+    urban_montserrado_icf_int, grand_bassa_icf_int,
+    icf_estimates, icf_bootstraps, icf_factors,
+    urban_montserrado_anthro_df, grand_bassa_anthro_df,
+    urban_montserrado_anthro_int, grand_bassa_anthro_int,
+    wasting_bootstraps
+  )
+)
+
+RdYlGn <- c("#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60", "#1a9850")
+
+YlOrRd <- c("#ffffb2", "#fed976", "#feb24c", "#fd8d3c", "#fc4e2a", "#e31a1c",
+"#b10026")
+
+get_div_colours <- colorRampPalette(colors = RdYlGn, space = "Lab")
+get_seq_colours <- colorRampPalette(colors = YlOrRd, space = "Lab")
+
+col_palette <- get_div_colours(n = 101)
+seq_palette <- get_seq_colours(n = 101)
+```
+
+<br/>
+
+## Wasting prevalence
+
+```{r wasting_table}
+wasting_bootstraps |>
+  dplyr::mutate(
+    estimate_gm = scales::percent(estimate_gm, accuracy = 0.01),
+    lcl_gm = scales::percent(lcl_gm, accuracy = 0.01),
+    ucl_gm = scales::percent(ucl_gm, accuracy = 0.01),
+    estimate_gb = scales::percent(estimate_gb, accuracy = 0.01),
+    lcl_gb = scales::percent(lcl_gb, accuracy = 0.01),
+    ucl_gb = scales::percent(ucl_gb, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", 
+                  "Estimate", "95% LCL", "95% UCL", 
+                  "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+### Global wasting
+
+```{r wasting_maps1, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_anthro(
+  interpolation = urban_montserrado_anthro_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "gam",
+  seq_palette = seq_palette
+)
+
+plot_anthro(
+  interpolation = grand_bassa_anthro_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "gam",
+  seq_palette = seq_palette
+)
+```
+
+### Moderate wasting
+
+```{r wasting_maps2, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_anthro(
+  interpolation = urban_montserrado_anthro_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mam",
+  seq_palette = seq_palette
+)
+
+plot_anthro(
+  interpolation = grand_bassa_anthro_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mam",
+  seq_palette = seq_palette
+)
+```
+
+### Severe wasting
+
+```{r wasting_maps3, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_anthro(
+  interpolation = urban_montserrado_anthro_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "sam",
+  seq_palette = seq_palette
+)
+
+plot_anthro(
+  interpolation = grand_bassa_anthro_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "sam",
+  seq_palette = seq_palette
+)
+```
+
+### Oedema
+
+```{r wasting_maps4, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_anthro(
+  interpolation = urban_montserrado_anthro_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "oedema",
+  seq_palette = seq_palette
+)
+
+plot_anthro(
+  interpolation = grand_bassa_anthro_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "oedema",
+  seq_palette = seq_palette
+)
+```
+
+## Anthropometric screening - MUAC
+
+```{r muac_screening, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_screening_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "muac_screen",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_screening_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "muac_screen",
+  col_palette = col_palette
+)
+```
+
+## Anthropometric screening - oedema
+
+```{r oedema_screening, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_screening_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "oedema_screen",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_screening_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "oedema_screen",
+  col_palette = col_palette
+)
+```
+
+```{r screening_table}
+screening_bootstraps |>
+  dplyr::mutate(
+    estimate_gm = scales::percent(estimate_gm, accuracy = 0.01),
+    lcl_gm = scales::percent(lcl_gm, accuracy = 0.01),
+    ucl_gm = scales::percent(ucl_gm, accuracy = 0.01),
+    estimate_gb = scales::percent(estimate_gb, accuracy = 0.01),
+    lcl_gb = scales::percent(lcl_gb, accuracy = 0.01),
+    ucl_gb = scales::percent(ucl_gb, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", 
+                  "Estimate", "95% LCL", "95% UCL", 
+                  "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+## CMAM Coverage
+
+```{r}
+cmam_estimates |>
+    dplyr::mutate(
+    estimate_gm = scales::percent(estimate_gm, accuracy = 0.01),
+    lcl_gm = scales::percent(lcl_gm, accuracy = 0.01),
+    ucl_gm = scales::percent(ucl_gm, accuracy = 0.01),
+    estimate_gb = scales::percent(estimate_gb, accuracy = 0.01),
+    lcl_gb = scales::percent(lcl_gb, accuracy = 0.01),
+    ucl_gb = scales::percent(ucl_gb, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", 
+                  "Estimate", "95% LCL", "95% UCL", 
+                  "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+### Case-finding effectiveness
+
+```{r case-finding, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_cmam_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "case_finding",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_cmam_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "case_finding",
+  col_palette = col_palette
+)
+```
+
+### Treatment coverage
+
+```{r treatment, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_cmam_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "treatment",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_cmam_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "treatment",
+  col_palette = col_palette
+)
+```
+
+### Reasons for non-coverage
+
+```{r out_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
+ggplot_pareto_factors(cmam_factors)
+```
+
+## Vitamin A supplementation coverage
+
+```{r vita_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_vita_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "vit1",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_vita_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "vit1",
+  col_palette = col_palette
+)
+```
+
+```{r vita_coverage_table}
+vita_bootstraps |>
+  dplyr::mutate(
+    estimate = scales::percent(estimate, accuracy = 0.01),
+    lcl = scales::percent(lcl, accuracy = 0.01),
+    ucl = scales::percent(ucl, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Survey Area", "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  )
+```
+
+### Reasons for non-coverage
+
+```{r vita_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
+ggplot_pareto_factors(vita_factors)
+```
+
+## Micronutrient powder supplementation coverage
+
+```{r mnp_coverage_table}
+mnp_bootstraps |>
+  dplyr::mutate(
+    estimate_gm = scales::percent(estimate_gm, accuracy = 0.01),
+    lcl_gm = scales::percent(lcl_gm, accuracy = 0.01),
+    ucl_gm = scales::percent(ucl_gm, accuracy = 0.01),
+    estimate_gb = scales::percent(estimate_gb, accuracy = 0.01),
+    lcl_gb = scales::percent(lcl_gb, accuracy = 0.01),
+    ucl_gb = scales::percent(ucl_gb, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", "Estimate", "95% LCL", 
+                  "95% UCL", "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+### Heard about micronutrient powder
+
+```{r mnp1_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_mnp_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mnp1",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_mnp_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mnp1",
+  col_palette = col_palette
+)
+```
+
+### Received micronutrient powder
+
+```{r mnp2_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_mnp_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mnp2",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_mnp_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mnp2",
+  col_palette = col_palette
+)
+```
+
+### Gave micronutrient powder to child
+
+```{r mnp3_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_mnp_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mnp3",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_mnp_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mnp3",
+  col_palette = col_palette
+)
+```
+
+### Gave micronutrient powder to child at least 7 times in past week
+
+```{r mnp4_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_mnp_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mnp4",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_mnp_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mnp4",
+  col_palette = col_palette
+)
+```
+
+### Reasons for non-coverage
+
+```{r mnp_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
+ggplot_pareto_factors(mnp_factors)
+```
+
+
+## Iron-folic acid supplementation coverage
+
+```{r ifa_coverage_table}
+ifa_bootstraps |>
+  dplyr::mutate(
+    estimate_gm = scales::percent(estimate_gm, accuracy = 0.01),
+    lcl_gm = scales::percent(lcl_gm, accuracy = 0.01),
+    ucl_gm = scales::percent(ucl_gm, accuracy = 0.01),
+    estimate_gb = scales::percent(estimate_gb, accuracy = 0.01),
+    lcl_gb = scales::percent(lcl_gb, accuracy = 0.01),
+    ucl_gb = scales::percent(ucl_gb, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", "Estimate", "95% LCL", 
+                  "95% UCL", "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+### Attended antenatal care during pregnancy of youngest child
+
+```{r ifa1_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_ifa_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "ifa1",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_ifa_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "ifa1",
+  col_palette = col_palette
+)
+```
+
+### Recieved information regarding iron-folic acid supplementation
+
+```{r ifa2_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_ifa_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "ifa2",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_ifa_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "ifa2",
+  col_palette = col_palette
+)
+```
+
+### Recieved iron-folic acid tablets
+
+```{r ifa3_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_ifa_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "ifa3",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_ifa_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "ifa3",
+  col_palette = col_palette
+)
+```
+
+### Consumed iron-folic acid tablets
+
+```{r ifa4_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_ifa_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "ifa4",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_ifa_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "ifa4",
+  col_palette = col_palette
+)
+```
+
+### Consumed iron-folic acid tablets for at least 90 days
+
+```{r ifa5_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_ifa_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "ifa5a",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_ifa_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "ifa5a",
+  col_palette = col_palette
+)
+```
+
+### Reasons for non-coverage
+
+```{r ifa_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
+ggplot_pareto_factors(ifa_factors)
+```
+
+## IYCF counselling coverage
+
+```{r icf_coverage_table}
+icf_bootstraps |>
+  dplyr::mutate(
+    estimate_gm = scales::percent(estimate_gm, accuracy = 0.01),
+    lcl_gm = scales::percent(lcl_gm, accuracy = 0.01),
+    ucl_gm = scales::percent(ucl_gm, accuracy = 0.01),
+    estimate_gb = scales::percent(estimate_gb, accuracy = 0.01),
+    lcl_gb = scales::percent(lcl_gb, accuracy = 0.01),
+    ucl_gb = scales::percent(ucl_gb, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", "Estimate", "95% LCL", 
+                  "95% UCL", "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+### Heard about IYCF counselling
+
+```{r icf1_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_icf_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "icf1",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_icf_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "icf1",
+  col_palette = col_palette
+)
+```
+
+### Attended IYCF counselling
+
+```{r icf2_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_icf_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "icf2",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_icf_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "icf2",
+  col_palette = col_palette
+)
+```
+
+### Reasons for non-coverage
+
+```{r icf_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
+ggplot_pareto_factors(icf_factors)
+```
+
+<br/>
+<br/>
