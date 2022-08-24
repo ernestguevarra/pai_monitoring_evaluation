@@ -142,7 +142,7 @@ data_raw <- tar_plan(
         eid = stringr::str_pad(eid, width = 10, side = "left", pad = "0")
       ) |>
       subset(!is.na(team)),
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "thorough")
   )#,
   #raw_data = get_kobo_data(form_id = raw_data_id) |>
   #  subset(as.Date(today) >= as.Date("2022-05-10"))
@@ -220,6 +220,13 @@ data_checks <- tar_plan(
 
 ## Process data
 data_processed <- tar_plan(
+  ## Population datasets
+  urban_montserrado_ea_population = get_ea_population(
+    ea = urban_montserrado_ea, raw_data
+  ),
+  grand_bassa_ea_population = get_ea_population(
+    ea = grand_bassa_ea, raw_data
+  ),
   ##
   urban_montserrado_int_grid = rgdal::readOGR(
     dsn = "https://github.com/validmeasures/liberiaData/blob/master/data-raw/maps/gmHexGrid.gpkg?raw=true"
@@ -229,6 +236,18 @@ data_processed <- tar_plan(
     dsn = "https://github.com/validmeasures/liberiaData/blob/master/data-raw/maps/gbHexGrid.gpkg?raw=true"
   ),
   grand_bassa_int_points = create_points(grand_bassa_int_grid),
+  urban_montserrado_anthro_df = recode_anthro(raw_data),
+  urban_montserrado_anthro_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_anthro_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_anthro_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  grand_bassa_anthro_df = recode_anthro(raw_data),
+  grand_bassa_anthro_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_anthro_df[ , c("longitude", "latitude")],
+    data = grand_bassa_anthro_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
   urban_montserrado_screening_df = recode_screening(raw_data) |>
     subset(cid == "30"),
   urban_montserrado_screening_sp = sp::SpatialPointsDataFrame(
@@ -290,12 +309,57 @@ data_processed <- tar_plan(
     coords = grand_bassa_mnp_df[ , c("longitude", "latitude")],
     data = grand_bassa_mnp_df,
     proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  urban_montserrado_ifa_df = recode_ifa(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_ifa_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_ifa_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_ifa_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  grand_bassa_ifa_df = recode_ifa(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_ifa_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_ifa_df[ , c("longitude", "latitude")],
+    data = grand_bassa_ifa_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  urban_montserrado_icf_df = recode_icf(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_icf_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_icf_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_icf_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
+  grand_bassa_icf_df = recode_icf(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_icf_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_icf_df[ , c("longitude", "latitude")],
+    data = grand_bassa_icf_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
   )
 )
 
 
 ## Analysis
 analysis <- tar_plan(
+  ## Wasting prevalence
+  urban_montserrado_anthro_int = interpolate_anthro(
+    anthro_sp = urban_montserrado_anthro_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_anthro_int = interpolate_anthro(
+    anthro_sp = grand_bassa_anthro_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  wasting_bootstrap = boot_estimates(
+    .data = list(urban_montserrado_anthro_df, grand_bassa_anthro_df),
+    w = list(urban_montserrado_ea_population, grand_bassa_ea_population),
+    vars = c("gam", "mam", "sam", "oedema"),
+    labs = c("Global wasting", "Moderate wasting", "Severe wasting", "Oedema")
+  ),
   ## Screening coverage
   urban_montserrado_screening_int = interpolate_screening(
     screening_sp = urban_montserrado_screening_sp,
@@ -309,6 +373,13 @@ analysis <- tar_plan(
   ),
   screening_estimates = estimate_screening_coverage(
     urban_montserrado_screening_df, grand_bassa_screening_df
+  ),
+  screening_bootstraps = boot_estimates(
+    .data = list(urban_montserrado_screening_df, grand_bassa_screening_df),
+    w = list(urban_montserrado_ea_population, grand_bassa_ea_population),
+    vars = c("muac_screen", "oedema_screen"),
+    labs = c("MUAC screening", "Oedema screening"),
+    suffix = c("gm", "gb")
   ),
   ## CMAM coverage
   urban_montserrado_cmam_int = interpolate_cmam(
@@ -341,6 +412,23 @@ analysis <- tar_plan(
   vita_estimates = estimate_vita_coverage(
     urban_montserrado_vita_df, grand_bassa_vita_df
   ),
+  vita_bootstraps = boot_estimate(
+    .data = urban_montserrado_vita_df,
+    w = urban_montserrado_ea_population,
+    vars = "vit1",
+    labs = "Urban Montserrado",
+    suffix = ""
+  ) |>
+    rbind(
+      boot_estimate(
+        .data = grand_bassa_vita_df,
+        w = grand_bassa_ea_population,
+        vars = "vit1",
+        labs = "Grand Bassa",
+        suffix = ""
+      )
+    ) |>
+    (\(x) { names(x) <- c("survey_area", "estimate", "lcl", "ucl"); x })(),
   vita_factors = recode_vita_factors(
     urban_montserrado_vita_df, grand_bassa_vita_df
   ),
@@ -358,8 +446,62 @@ analysis <- tar_plan(
   mnp_estimates = estimate_mnp_coverage(
     urban_montserrado_mnp_df, grand_bassa_mnp_df
   ),
+  mnp_bootstraps = boot_estimates(
+    .data = list(urban_montserrado_mnp_df, grand_bassa_mnp_df),
+    w = list(urban_montserrado_ea_population, grand_bassa_ea_population),
+    vars = c("mnp1", "mnp2", "mnp3", "mnp4"),
+    labs = c("Heard of MNP", "Received MNP", "Gave MNP to child", 
+             "Gave MNP at least 7 days in past week")
+  ),
   mnp_factors = recode_mnp_factors(
     urban_montserrado_mnp_df, grand_bassa_mnp_df
+  ),
+  ## IFA coverage
+  urban_montserrado_ifa_int = interpolate_ifa(
+    ifa_sp = urban_montserrado_ifa_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_ifa_int = interpolate_ifa(
+    ifa_sp = grand_bassa_ifa_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  ifa_estimates = estimate_ifa_coverage(
+    urban_montserrado_ifa_df, grand_bassa_ifa_df
+  ),
+  ifa_bootstraps = boot_estimates(
+    .data = list(urban_montserrado_ifa_df, grand_bassa_ifa_df),
+    w = list(urban_montserrado_ea_population, grand_bassa_ea_population),
+    vars = c("ifa1", "ifa2", "ifa3", "ifa4", "ifa5a"),
+    labs = c("Attended ANC", "Received information on IFA", "Received IFA", 
+             "Consumed IFA", "Consumed IFA at least 90 days")
+  ),
+  ifa_factors = recode_ifa_factors(
+    urban_montserrado_ifa_df, grand_bassa_ifa_df
+  ),
+  ## IYCF counselling coverage
+  urban_montserrado_icf_int = interpolate_icf(
+    icf_sp = urban_montserrado_icf_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_icf_int = interpolate_icf(
+    icf_sp = grand_bassa_icf_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  icf_estimates = estimate_icf_coverage(
+    urban_montserrado_icf_df, grand_bassa_icf_df
+  ),
+  icf_bootstraps = boot_estimates(
+    .data = list(urban_montserrado_icf_df, grand_bassa_icf_df),
+    w = list(urban_montserrado_ea_population, grand_bassa_ea_population),
+    vars = c("icf1", "icf2"),
+    labs = c("Heard about IYCF counselling", "Attended IYCF counselling")
+  ),
+  icf_factors = recode_icf_factors(
+    urban_montserrado_icf_df, grand_bassa_icf_df
   )
 )
 
@@ -433,6 +575,12 @@ reports <- tar_plan(
   tar_render(
     name = preliminary_results_report,
     path = "reports/preliminary_results_report.Rmd",
+    output_dir = "outputs",
+    knit_root_dir = here::here()
+  ),
+  tar_render(
+    name = final_results_report,
+    path = "reports/final_results_report.Rmd",
     output_dir = "outputs",
     knit_root_dir = here::here()
   )

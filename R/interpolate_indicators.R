@@ -265,7 +265,7 @@ interpolate_vita <- function(vita_sp, point_grid, idp = 2) {
 ################################################################################
 #
 #'
-#' Interpolate NNP indicators
+#' Interpolate MNP indicators
 #'
 #
 ################################################################################
@@ -298,3 +298,118 @@ interpolate_mnp <- function(mnp_sp, point_grid, idp = 2) {
   
   results_df
 }
+
+
+################################################################################
+#
+#'
+#' Interpolate IFA indicators
+#'
+#
+################################################################################
+
+interpolate_ifa <- function(ifa_sp, point_grid, idp = 2) {
+  
+  results_df <- data.frame(
+    matrix(
+      nrow = length(point_grid),
+      ncol = 5
+    )
+  )
+  
+  ##
+  names(results_df) <- names(ifa_sp)[c(6:8, 18, 25)]
+  
+  ##
+  for(i in names(results_df)) {
+    currentIndicator <- ifa_sp[!is.na(ifa_sp[[i]]), ]
+    if(length(currentIndicator) != 0 ) {
+      temp <- gstat::idw(
+        formula = eval(parse(text = paste(i, "~", 1, sep = " "))),
+        locations = currentIndicator,
+        newdata = point_grid,
+        idp = idp
+      )
+      results_df[[i]] <- temp$var1.pred
+    }
+  }
+  
+  results_df
+}
+
+
+################################################################################
+#
+#'
+#' Interpolate ICF indicators
+#'
+#
+################################################################################
+
+interpolate_icf <- function(icf_sp, point_grid, idp = 2) {
+  
+  results_df <- data.frame(
+    matrix(
+      nrow = length(point_grid),
+      ncol = 2
+    )
+  )
+  
+  ##
+  names(results_df) <- names(icf_sp)[6:7]
+  
+  ##
+  for(i in names(results_df)) {
+    currentIndicator <- icf_sp[!is.na(icf_sp[[i]]), ]
+    if(length(currentIndicator) != 0 ) {
+      temp <- gstat::idw(
+        formula = eval(parse(text = paste(i, "~", 1, sep = " "))),
+        locations = currentIndicator,
+        newdata = point_grid,
+        idp = idp
+      )
+      results_df[[i]] <- temp$var1.pred
+    }
+  }
+  
+  results_df
+}
+
+
+################################################################################
+#
+#'
+#' Interpolate anthro indicators
+#'
+#
+################################################################################
+
+interpolate_anthro <- function(anthro_sp, point_grid, idp = 2) {
+  
+  results_df <- data.frame(
+    matrix(
+      nrow = length(point_grid),
+      ncol = 4
+    )
+  )
+  
+  ##
+  names(results_df) <- names(anthro_sp)[9:12]
+  
+  ##
+  for(i in names(results_df)) {
+    currentIndicator <- anthro_sp[!is.na(anthro_sp[[i]]), ]
+    if(length(currentIndicator) != 0 ) {
+      temp <- gstat::idw(
+        formula = eval(parse(text = paste(i, "~", 1, sep = " "))),
+        locations = currentIndicator,
+        newdata = point_grid,
+        idp = idp
+      )
+      results_df[[i]] <- temp$var1.pred
+    }
+  }
+  
+  results_df
+}
+
