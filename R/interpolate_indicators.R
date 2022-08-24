@@ -236,16 +236,55 @@ interpolate_vita <- function(vita_sp, point_grid, idp = 2) {
   results_df <- data.frame(
     matrix(
       nrow = length(point_grid),
-      ncol = 2
+      ncol = 1
     )
   )
   
   ##
-  names(results_df) <- names(vita_sp)[6:7]
+  names(results_df) <- names(vita_sp)[6]
   
   ##
   for(i in names(results_df)) {
     currentIndicator <- vita_sp[!is.na(vita_sp[[i]]), ]
+    if(length(currentIndicator) != 0 ) {
+      temp <- gstat::idw(
+        formula = eval(parse(text = paste(i, "~", 1, sep = " "))),
+        locations = currentIndicator,
+        newdata = point_grid,
+        idp = idp
+      )
+      results_df[[i]] <- temp$var1.pred
+    }
+  }
+  
+  results_df
+}
+
+
+
+################################################################################
+#
+#'
+#' Interpolate NNP indicators
+#'
+#
+################################################################################
+
+interpolate_mnp <- function(mnp_sp, point_grid, idp = 2) {
+  
+  results_df <- data.frame(
+    matrix(
+      nrow = length(point_grid),
+      ncol = 4
+    )
+  )
+  
+  ##
+  names(results_df) <- names(mnp_sp)[c(6:7, 20, 30)]
+  
+  ##
+  for(i in names(results_df)) {
+    currentIndicator <- mnp_sp[!is.na(mnp_sp[[i]]), ]
     if(length(currentIndicator) != 0 ) {
       temp <- gstat::idw(
         formula = eval(parse(text = paste(i, "~", 1, sep = " "))),

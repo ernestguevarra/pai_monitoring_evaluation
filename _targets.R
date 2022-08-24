@@ -253,6 +253,13 @@ data_processed <- tar_plan(
     data = urban_montserrado_vita_df,
     proj4string = CRS(proj4string(urban_montserrado_int_grid))
   ),
+  urban_montserrado_mnp_df = recode_mnp(raw_data) |>
+    subset(cid == "30"),
+  urban_montserrado_mnp_sp = sp::SpatialPointsDataFrame(
+    coords = urban_montserrado_mnp_df[ , c("longitude", "latitude")],
+    data = urban_montserrado_mnp_df,
+    proj4string = CRS(proj4string(urban_montserrado_int_grid))
+  ),
   grand_bassa_screening_df = recode_screening(raw_data) |>
     subset(cid != "30"),
   grand_bassa_screening_sp = sp::SpatialPointsDataFrame(
@@ -275,6 +282,13 @@ data_processed <- tar_plan(
   grand_bassa_vita_sp = sp::SpatialPointsDataFrame(
     coords = grand_bassa_vita_df[ , c("longitude", "latitude")],
     data = grand_bassa_vita_df,
+    proj4string = CRS(proj4string(grand_bassa_int_grid))
+  ),
+  grand_bassa_mnp_df = recode_mnp(raw_data) |>
+    subset(cid != "30"),
+  grand_bassa_mnp_sp = sp::SpatialPointsDataFrame(
+    coords = grand_bassa_mnp_df[ , c("longitude", "latitude")],
+    data = grand_bassa_mnp_df,
     proj4string = CRS(proj4string(grand_bassa_int_grid))
   )
 )
@@ -312,6 +326,40 @@ analysis <- tar_plan(
   ),
   cmam_factors = recode_cmam_factors(
     urban_montserrado_cmam_factors_df, grand_bassa_cmam_factors_df
+  ),
+  ## Vitamin A
+  urban_montserrado_vita_int = interpolate_vita(
+    vita_sp = urban_montserrado_vita_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_vita_int = interpolate_vita(
+    vita_sp = grand_bassa_vita_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  vita_estimates = estimate_vita_coverage(
+    urban_montserrado_vita_df, grand_bassa_vita_df
+  ),
+  vita_factors = recode_vita_factors(
+    urban_montserrado_vita_df, grand_bassa_vita_df
+  ),
+  ## MNP
+  urban_montserrado_mnp_int = interpolate_mnp(
+    mnp_sp = urban_montserrado_mnp_sp,
+    point_grid = urban_montserrado_int_points,
+    idp = 2
+  ),
+  grand_bassa_mnp_int = interpolate_mnp(
+    mnp_sp = grand_bassa_mnp_sp,
+    point_grid = grand_bassa_int_points,
+    idp = 2
+  ),
+  mnp_estimates = estimate_mnp_coverage(
+    urban_montserrado_mnp_df, grand_bassa_mnp_df
+  ),
+  mnp_factors = recode_mnp_factors(
+    urban_montserrado_mnp_df, grand_bassa_mnp_df
   )
 )
 

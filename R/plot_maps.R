@@ -87,11 +87,16 @@
 #0906011012 <- 0904008012
 
 
-plot_interpolation <- function(interpolation, base_grid, base_map, var, col_palette) {
+plot_interpolation <- function(interpolation, 
+                               base_grid, 
+                               base_map, 
+                               var, 
+                               col_palette) {
   sp::plot(
     base_grid, 
     col = col_palette[(interpolation[[var]] * 100) + 1], 
     border = col_palette[(interpolation[[var]] * 100) + 1]
   )
+  
   plot(sf::st_geometry(base_map), add = TRUE)
 }

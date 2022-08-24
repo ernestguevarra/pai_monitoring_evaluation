@@ -130,3 +130,123 @@ estimate_cmam_coverage <- function(urban_montserrado_cmam_df,
   cmam_results
 }
 
+
+################################################################################
+#
+#'
+#' Estimate vitamin A coverage using binom.test
+#'
+#
+################################################################################
+
+estimate_vita_coverage <- function(urban_montserrado_vita_df,
+                                   grand_bassa_vita_df) {
+  gm_vita_coverage <- binom.test(
+    x = c(table(urban_montserrado_vita_df[["vit1"]])[2],
+          table(urban_montserrado_vita_df[["vit1"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_vita_coverage <- binom.test(
+    x = c(table(grand_bassa_vita_df[["vit1"]])[2],
+          table(grand_bassa_vita_df[["vit1"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  coverage_results <- data.frame(
+    "Survey area" = c("Urban Montserrado", "Grand Bassa"),
+    rbind(
+      gm_vita_coverage,
+      gb_vita_coverage
+    )
+  )
+  
+  
+  row.names(coverage_results) <- NULL
+  names(coverage_results) <- c("survey_area", "estimate", "lcl", "ucl")
+  
+  coverage_results
+}
+
+
+################################################################################
+#
+#'
+#' Estimate mnp coverage using binom.test
+#'
+#
+################################################################################
+
+estimate_mnp_coverage <- function(urban_montserrado_mnp_df,
+                                  grand_bassa_mnp_df) {
+  gm_mnp1_coverage <- binom.test(
+    x = c(table(urban_montserrado_mnp_df[["mnp1"]])[2],
+          table(urban_montserrado_mnp_df[["mnp1"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_mnp1_coverage <- binom.test(
+    x = c(table(grand_bassa_mnp_df[["mnp1"]])[2],
+          table(grand_bassa_mnp_df[["mnp1"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gm_mnp2_coverage <- binom.test(
+    x = c(table(urban_montserrado_mnp_df[["mnp2"]])[2],
+          table(urban_montserrado_mnp_df[["mnp2"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_mnp2_coverage <- binom.test(
+    x = c(table(grand_bassa_mnp_df[["mnp2"]])[2],
+          table(grand_bassa_mnp_df[["mnp2"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gm_mnp3_coverage <- binom.test(
+    x = c(table(urban_montserrado_mnp_df[["mnp3"]])[2],
+          table(urban_montserrado_mnp_df[["mnp3"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_mnp3_coverage <- binom.test(
+    x = c(table(grand_bassa_mnp_df[["mnp3"]])[2],
+          table(grand_bassa_mnp_df[["mnp3"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gm_mnp4_coverage <- binom.test(
+    x = c(table(urban_montserrado_mnp_df[["mnp4"]])[2],
+          table(urban_montserrado_mnp_df[["mnp4"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  gb_mnp4_coverage <- binom.test(
+    x = c(table(grand_bassa_mnp_df[["mnp4"]])[2],
+          table(grand_bassa_mnp_df[["mnp4"]])[1])
+  ) |>
+    (\(x) c(x$estimate, x$conf.int))()
+  
+  
+  coverage_results <- data.frame(
+    "Indicators" = c(
+      "Heard of MNP", 
+      "Received MNP", 
+      "Gave MNP to child", 
+      "Gave MNP at least 7 days in past week"
+    ),
+    rbind(
+      c(gm_mnp1_coverage, gb_mnp1_coverage),
+      c(gm_mnp2_coverage, gb_mnp2_coverage),
+      c(gm_mnp3_coverage, gb_mnp3_coverage),
+      c(gm_mnp4_coverage, gb_mnp4_coverage)
+    )
+  )
+  
+  row.names(coverage_results) <- NULL
+  names(coverage_results) <- c("indicators", 
+                               "gm_estimate", "gm_lcl", "gm_ucl", 
+                               "gb_estimate", "gb_lcl", "gb_ucl")
+  
+  coverage_results
+}

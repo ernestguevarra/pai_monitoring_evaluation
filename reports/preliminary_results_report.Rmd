@@ -28,7 +28,13 @@ targets::tar_load(
     urban_montserrado_cmam_int, grand_bassa_cmam_int,
     urban_montserrado_screening_df, grand_bassa_screening_df,
     urban_montserrado_screening_int, grand_bassa_screening_int,
-    screening_estimates, cmam_estimates, cmam_factors
+    screening_estimates, cmam_estimates, cmam_factors,
+    urban_montserrado_vita_df, grand_bassa_vita_df,
+    urban_montserrado_vita_int, grand_bassa_vita_int,
+    vita_estimates, vita_factors,
+    urban_montserrado_mnp_df, grand_bassa_mnp_df,
+    urban_montserrado_mnp_int, grand_bassa_mnp_int,
+    mnp_estimates, mnp_factors
   )
 )
 
@@ -188,6 +194,173 @@ plot_interpolation(
 ```{r out_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
 ggplot_pareto_factors(cmam_factors)
 ```
+
+## Vitamin A supplementation coverage
+
+```{r vita_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_vita_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "vit1",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_vita_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "vit1",
+  col_palette = col_palette
+)
+```
+
+```{r vita_coverage_table}
+vita_estimates |>
+  dplyr::mutate(
+    estimate = scales::percent(estimate, accuracy = 0.01),
+    lcl = scales::percent(lcl, accuracy = 0.01),
+    ucl = scales::percent(ucl, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Survey Area", "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  )
+```
+
+### Reasons for non-coverage
+
+```{r vita_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
+ggplot_pareto_factors(vita_factors)
+```
+
+## Micronutrient powder supplementation coverage
+
+```{r mnp_coverage_table}
+mnp_estimates |>
+  dplyr::mutate(
+    gm_estimate = scales::percent(gm_estimate, accuracy = 0.01),
+    gm_lcl = scales::percent(gm_lcl, accuracy = 0.01),
+    gm_ucl = scales::percent(gm_ucl, accuracy = 0.01),
+    gb_estimate = scales::percent(gb_estimate, accuracy = 0.01),
+    gb_lcl = scales::percent(gb_lcl, accuracy = 0.01),
+    gb_ucl = scales::percent(gb_ucl, accuracy = 0.01)
+  ) |>
+  knitr::kable(
+    row.names = FALSE,
+    col.names = c("Indicators", "Estimate", "95% LCL", 
+                  "95% UCL", "Estimate", "95% LCL", "95% UCL"),
+    align = "r"
+  ) |>
+  kableExtra::kable_styling(
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "center"
+  ) |>
+  kableExtra::add_header_above(
+    header = c(" " = 1, "Urban Montserrado" = 3, "Grand Bassa" = 3),
+    bold = TRUE
+  )
+```
+
+### Heard about micronutrient powder
+
+```{r mnp1_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_mnp_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mnp1",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_mnp_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mnp1",
+  col_palette = col_palette
+)
+```
+
+### Received micronutrient powder
+
+```{r mnp2_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_mnp_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mnp2",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_mnp_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mnp2",
+  col_palette = col_palette
+)
+```
+
+### Gave micronutrient powder to child
+
+```{r mnp3_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_mnp_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mnp3",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_mnp_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mnp3",
+  col_palette = col_palette
+)
+```
+
+### Gave micronutrient powder to child at least 7 times in past week
+
+```{r mnp4_coverage_map, fig.show = "hold", out.width = "50%"}
+par(mar = c(0,0,0,0))
+plot_interpolation(
+  interpolation = urban_montserrado_mnp_int,
+  base_grid = urban_montserrado_int_grid,
+  base_map = urban_montserrado,
+  var = "mnp4",
+  col_palette = col_palette
+)
+
+plot_interpolation(
+  interpolation = grand_bassa_mnp_int,
+  base_grid = grand_bassa_int_grid,
+  base_map = grand_bassa,
+  var = "mnp4",
+  col_palette = col_palette
+)
+```
+
+### Reasons for non-coverage
+
+```{r mnp_reasons, fig.align = "center", fig.width = 12, fig.height = 8}
+ggplot_pareto_factors(mnp_factors)
+```
+
+
 
 <br/>
 <br/>
