@@ -142,7 +142,7 @@ data_raw <- tar_plan(
         eid = stringr::str_pad(eid, width = 10, side = "left", pad = "0")
       ) |>
       subset(!is.na(team)),
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "thorough")
   )#,
   #raw_data = get_kobo_data(form_id = raw_data_id) |>
   #  subset(as.Date(today) >= as.Date("2022-05-10"))
@@ -361,6 +361,8 @@ analysis <- tar_plan(
   mnp_factors = recode_mnp_factors(
     urban_montserrado_mnp_df, grand_bassa_mnp_df
   )
+  ## IYCF counselling coverage
+  
 )
 
 
