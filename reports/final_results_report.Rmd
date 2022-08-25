@@ -106,8 +106,8 @@ x <- x |> sf::st_as_sf()
 plot(
   x = x["gam"],
   main = NULL,
-  pal = seq_palette,
-  nbreaks = 101,
+  pal = RColorBrewer::brewer.pal(n = 7, name = "YlOrRd"),
+  nbreaks = 7,
   breaks = "quantile",
   key.pos = 4,
   lty = 0
@@ -121,8 +121,8 @@ y <- y |> sf::st_as_sf()
 plot(
   x = y["gam"],
   main = NULL,
-  pal = seq_palette,
-  nbreaks = 101,
+  pal = RColorBrewer::brewer.pal(n = 7, name = "YlOrRd"),
+  nbreaks = 7,
   breaks = "quantile",
   key.pos = 4,
   lty = 0
@@ -136,8 +136,8 @@ par(mar = c(0,0,0,0))
 plot(
   x = x["mam"],
   main = NULL,
-  pal = seq_palette,
-  nbreaks = 101,
+  pal = RColorBrewer::brewer.pal(n = 7, name = "YlOrRd"),
+  nbreaks = 7,
   breaks = "quantile",
   key.pos = 4,
   lty = 0
@@ -146,8 +146,8 @@ plot(
 plot(
   x = y["mam"],
   main = NULL,
-  pal = seq_palette,
-  nbreaks = 101,
+  pal = RColorBrewer::brewer.pal(n = 7, name = "YlOrRd"),
+  nbreaks = 7,
   breaks = "quantile",
   key.pos = 4,
   lty = 0
@@ -161,8 +161,8 @@ par(mar = c(0,0,0,0))
 plot(
   x = x["sam"],
   main = NULL,
-  pal = seq_palette,
-  nbreaks = 101,
+  pal = RColorBrewer::brewer.pal(n = 7, name = "YlOrRd"),
+  nbreaks = 7,
   breaks = "quantile",
   key.pos = 4,
   lty = 0
@@ -170,9 +170,9 @@ plot(
 
 plot(
   x = y["sam"],
-  pal = seq_palette,
   main = NULL,
-  nbreaks = 101,
+  pal = RColorBrewer::brewer.pal(n = 7, name = "YlOrRd"),
+  nbreaks = 7,
   breaks = "quantile",
   key.pos = 4,
   lty = 0
@@ -186,8 +186,8 @@ par(mar = c(0,0,0,0))
 plot(
   x = x["oedema"],
   main = NULL,
-  pal = seq_palette,
-  nbreaks = 101,
+  pal = RColorBrewer::brewer.pal(n = 7, name = "YlOrRd"),
+  nbreaks = 7,
   breaks = "quantile",
   key.pos = 4,
   lty = 0
@@ -196,8 +196,8 @@ plot(
 plot(
   x = y["oedema"],
   main = NULL,
-  pal = seq_palette,
-  nbreaks = 101,
+  pal = RColorBrewer::brewer.pal(n = 7, name = "YlOrRd"),
+  nbreaks = 7,
   breaks = "quantile",
   key.pos = 4,
   lty = 0
