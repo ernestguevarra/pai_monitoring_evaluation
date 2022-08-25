@@ -99,20 +99,33 @@ wasting_bootstraps |>
 
 ```{r wasting_maps1, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_anthro(
-  interpolation = urban_montserrado_anthro_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "gam",
-  seq_palette = seq_palette
+x <- urban_montserrado_int_grid
+x@data <- urban_montserrado_anthro_int * 100
+x <- x |> sf::st_as_sf()
+
+plot(
+  x = x["gam"],
+  main = NULL,
+  pal = seq_palette,
+  nbreaks = 101,
+  breaks = "quantile",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_anthro(
-  interpolation = grand_bassa_anthro_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "gam",
-  seq_palette = seq_palette
+
+y <- grand_bassa_int_grid
+y@data <- grand_bassa_anthro_int * 100
+y <- y |> sf::st_as_sf()
+
+plot(
+  x = y["gam"],
+  main = NULL,
+  pal = seq_palette,
+  nbreaks = 101,
+  breaks = "quantile",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -120,20 +133,24 @@ plot_anthro(
 
 ```{r wasting_maps2, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_anthro(
-  interpolation = urban_montserrado_anthro_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "mam",
-  seq_palette = seq_palette
+plot(
+  x = x["mam"],
+  main = NULL,
+  pal = seq_palette,
+  nbreaks = 101,
+  breaks = "quantile",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_anthro(
-  interpolation = grand_bassa_anthro_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "mam",
-  seq_palette = seq_palette
+plot(
+  x = y["mam"],
+  main = NULL,
+  pal = seq_palette,
+  nbreaks = 101,
+  breaks = "quantile",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -141,20 +158,24 @@ plot_anthro(
 
 ```{r wasting_maps3, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_anthro(
-  interpolation = urban_montserrado_anthro_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "sam",
-  seq_palette = seq_palette
+plot(
+  x = x["sam"],
+  main = NULL,
+  pal = seq_palette,
+  nbreaks = 101,
+  breaks = "quantile",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_anthro(
-  interpolation = grand_bassa_anthro_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "sam",
-  seq_palette = seq_palette
+plot(
+  x = y["sam"],
+  pal = seq_palette,
+  main = NULL,
+  nbreaks = 101,
+  breaks = "quantile",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -162,41 +183,58 @@ plot_anthro(
 
 ```{r wasting_maps4, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_anthro(
-  interpolation = urban_montserrado_anthro_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "oedema",
-  seq_palette = seq_palette
+plot(
+  x = x["oedema"],
+  main = NULL,
+  pal = seq_palette,
+  nbreaks = 101,
+  breaks = "quantile",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_anthro(
-  interpolation = grand_bassa_anthro_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "oedema",
-  seq_palette = seq_palette
+plot(
+  x = y["oedema"],
+  main = NULL,
+  pal = seq_palette,
+  nbreaks = 101,
+  breaks = "quantile",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
 ## Anthropometric screening - MUAC
 
 ```{r muac_screening, fig.show = "hold", out.width = "50%"}
+x <- urban_montserrado_int_grid
+x@data <- urban_montserrado_screening_int * 100
+x <- x |> sf::st_as_sf()
+
+y <- grand_bassa_int_grid
+y@data <- grand_bassa_screening_int * 100
+y <- y |> sf::st_as_sf()
+
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_screening_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "muac_screen",
-  col_palette = col_palette
+
+plot(
+  x = x["muac_screen"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_screening_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "muac_screen",
-  col_palette = col_palette
+plot(
+  x = y["muac_screen"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -204,20 +242,24 @@ plot_interpolation(
 
 ```{r oedema_screening, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_screening_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "oedema_screen",
-  col_palette = col_palette
+plot(
+  x = x["oedema_screen"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_screening_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "oedema_screen",
-  col_palette = col_palette
+plot(
+  x = y["oedema_screen"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -282,21 +324,34 @@ cmam_estimates |>
 ### Case-finding effectiveness
 
 ```{r case-finding, fig.show = "hold", out.width = "50%"}
+x <- urban_montserrado_int_grid
+x@data <- urban_montserrado_cmam_int * 100
+x <- x |> sf::st_as_sf()
+
+y <- grand_bassa_int_grid
+y@data <- grand_bassa_cmam_int * 100
+y <- y |> sf::st_as_sf()
+
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_cmam_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "case_finding",
-  col_palette = col_palette
+
+plot(
+  x = x["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_cmam_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "case_finding",
-  col_palette = col_palette
+plot(
+  x = y["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -304,20 +359,24 @@ plot_interpolation(
 
 ```{r treatment, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_cmam_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "treatment",
-  col_palette = col_palette
+plot(
+  x = x["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_cmam_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "treatment",
-  col_palette = col_palette
+plot(
+  x = y["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -330,21 +389,34 @@ ggplot_pareto_factors(cmam_factors)
 ## Vitamin A supplementation coverage
 
 ```{r vita_coverage_map, fig.show = "hold", out.width = "50%"}
+x <- urban_montserrado_int_grid
+x@data <- urban_montserrado_vita_int * 100
+x <- x |> sf::st_as_sf()
+
+y <- grand_bassa_int_grid
+y@data <- grand_bassa_vita_int * 100
+y <- y |> sf::st_as_sf()
+
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_vita_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "vit1",
-  col_palette = col_palette
+
+plot(
+  x = x["vit1"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_vita_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "vit1",
-  col_palette = col_palette
+plot(
+  x = y["vit1"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -405,21 +477,34 @@ mnp_bootstraps |>
 ### Heard about micronutrient powder
 
 ```{r mnp1_coverage_map, fig.show = "hold", out.width = "50%"}
+x <- urban_montserrado_int_grid
+x@data <- urban_montserrado_mnp_int * 100
+x <- x |> sf::st_as_sf()
+
+y <- grand_bassa_int_grid
+y@data <- grand_bassa_mnp_int * 100
+y <- y |> sf::st_as_sf()
+
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_mnp_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "mnp1",
-  col_palette = col_palette
+
+plot(
+  x = x["mnp1"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_mnp_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "mnp1",
-  col_palette = col_palette
+plot(
+  x = y["mnp1"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -427,20 +512,24 @@ plot_interpolation(
 
 ```{r mnp2_coverage_map, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_mnp_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "mnp2",
-  col_palette = col_palette
+plot(
+  x = x["mnp2"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_mnp_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "mnp2",
-  col_palette = col_palette
+plot(
+  x = y["mnp2"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -448,20 +537,24 @@ plot_interpolation(
 
 ```{r mnp3_coverage_map, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_mnp_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "mnp3",
-  col_palette = col_palette
+plot(
+  x = x["mnp3"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_mnp_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "mnp3",
-  col_palette = col_palette
+plot(
+  x = y["mnp3"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -469,20 +562,24 @@ plot_interpolation(
 
 ```{r mnp4_coverage_map, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_mnp_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "mnp4",
-  col_palette = col_palette
+plot(
+  x = x["mnp4"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_mnp_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "mnp4",
-  col_palette = col_palette
+plot(
+  x = y["mnp4"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -525,21 +622,34 @@ ifa_bootstraps |>
 ### Attended antenatal care during pregnancy of youngest child
 
 ```{r ifa1_coverage_map, fig.show = "hold", out.width = "50%"}
+x <- urban_montserrado_int_grid
+x@data <- urban_montserrado_ifa_int * 100
+x <- x |> sf::st_as_sf()
+
+y <- grand_bassa_int_grid
+y@data <- grand_bassa_ifa_int * 100
+y <- y |> sf::st_as_sf()
+
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_ifa_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "ifa1",
-  col_palette = col_palette
+
+plot(
+  x = x["ifa1"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_ifa_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "ifa1",
-  col_palette = col_palette
+plot(
+  x = y["ifa1"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -547,20 +657,24 @@ plot_interpolation(
 
 ```{r ifa2_coverage_map, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_ifa_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "ifa2",
-  col_palette = col_palette
+plot(
+  x = x["ifa2"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_ifa_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "ifa2",
-  col_palette = col_palette
+plot(
+  x = y["ifa2"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -568,20 +682,24 @@ plot_interpolation(
 
 ```{r ifa3_coverage_map, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_ifa_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "ifa3",
-  col_palette = col_palette
+plot(
+  x = x["ifa3"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_ifa_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "ifa3",
-  col_palette = col_palette
+plot(
+  x = y["ifa3"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -589,20 +707,24 @@ plot_interpolation(
 
 ```{r ifa4_coverage_map, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_ifa_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "ifa4",
-  col_palette = col_palette
+plot(
+  x = x["ifa4"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_ifa_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "ifa4",
-  col_palette = col_palette
+plot(
+  x = y["ifa4"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -610,20 +732,24 @@ plot_interpolation(
 
 ```{r ifa5_coverage_map, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_ifa_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "ifa5a",
-  col_palette = col_palette
+plot(
+  x = x["ifa5a"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_ifa_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "ifa5a",
-  col_palette = col_palette
+plot(
+  x = y["ifa5a"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -665,21 +791,34 @@ icf_bootstraps |>
 ### Heard about IYCF counselling
 
 ```{r icf1_coverage_map, fig.show = "hold", out.width = "50%"}
+x <- urban_montserrado_int_grid
+x@data <- urban_montserrado_icf_int * 100
+x <- x |> sf::st_as_sf()
+
+y <- grand_bassa_int_grid
+y@data <- grand_bassa_icf_int * 100
+y <- y |> sf::st_as_sf()
+
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_icf_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "icf1",
-  col_palette = col_palette
+
+plot(
+  x = x["icf1"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_icf_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "icf1",
-  col_palette = col_palette
+plot(
+  x = y["icf1"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 
@@ -687,20 +826,24 @@ plot_interpolation(
 
 ```{r icf2_coverage_map, fig.show = "hold", out.width = "50%"}
 par(mar = c(0,0,0,0))
-plot_interpolation(
-  interpolation = urban_montserrado_icf_int,
-  base_grid = urban_montserrado_int_grid,
-  base_map = urban_montserrado,
-  var = "icf2",
-  col_palette = col_palette
+plot(
+  x = x["icf2"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 
-plot_interpolation(
-  interpolation = grand_bassa_icf_int,
-  base_grid = grand_bassa_int_grid,
-  base_map = grand_bassa,
-  var = "icf2",
-  col_palette = col_palette
+plot(
+  x = y["icf2"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0
 )
 ```
 

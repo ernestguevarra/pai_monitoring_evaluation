@@ -18,6 +18,7 @@ library(ggplot2)
 library(blastula)
 library(labelled)
 library(tidytext)
+library(RColorBrewer)
 
 
 ################################################################################
