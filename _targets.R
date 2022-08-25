@@ -363,7 +363,7 @@ analysis <- tar_plan(
   ## Screening coverage
   urban_montserrado_screening_int = interpolate_screening(
     screening_sp = urban_montserrado_screening_sp,
-    point_grid = grand_bassa_int_points,
+    point_grid = urban_montserrado_int_points,
     idp = 2
   ),
   grand_bassa_screening_int = interpolate_screening(

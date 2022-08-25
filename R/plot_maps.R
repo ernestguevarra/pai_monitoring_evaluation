@@ -124,3 +124,6 @@ plot_anthro <- function(interpolation,
   
   plot(sf::st_geometry(base_map), add = TRUE)
 }
+
+
+
