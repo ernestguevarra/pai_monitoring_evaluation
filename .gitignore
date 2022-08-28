@@ -12,6 +12,7 @@ data
 !data/.gitkeep
 outputs
 !outputs/.gitkeep
+!outputs/fonts
 _targets
 Rplot.pdf
 Rplots.pdf
