@@ -395,6 +395,7 @@ analysis <- tar_plan(
   cmam_estimates = estimate_cmam_coverage(
     urban_montserrado_cmam_df, grand_bassa_cmam_df
   ),
+  cmam_estimates_long = lengthen_cmam_estimates(cmam_estimates),
   cmam_factors = recode_cmam_factors(
     urban_montserrado_cmam_factors_df, grand_bassa_cmam_factors_df
   ),
@@ -601,7 +602,19 @@ reports <- tar_plan(
   ),
   tar_render(
     name = cmam_coverage_dashboard,
-    path = "reports/cmam_coverage_dashboard.Rmd",
+    path = "reports/cmam_coverage.Rmd",
+    output_dir = "outputs",
+    knit_root_dir = here::here()
+  ),
+  tar_render(
+    name = urban_montserrado_cmam_dashboard,
+    path = "reports/urban_montserrado_cmam.Rmd",
+    output_dir = "outputs",
+    knit_root_dir = here::here()
+  ),
+  tar_render(
+    name = grand_bassa_cmam_dashboard,
+    path = "reports/grand_bassa_cmam.Rmd",
     output_dir = "outputs",
     knit_root_dir = here::here()
   )
@@ -624,9 +637,20 @@ deploy <- tar_plan(
     sender = Sys.getenv("GMAIL_USERNAME"),
     recipient = eval(parse(text = Sys.getenv("REPORT_RECIPIENTS")))
   ),
+  urban_montserrado_cmam_dashboard_deployed = deploy_cmam_dashboard(
+    from = urban_montserrado_cmam_dashboard[1],
+    to = "docs/urban_montserrado_cmam.html"
+  ),
+  grand_bassa_cmam_dashboard_deployed = deploy_cmam_dashboard(
+    from = grand_bassa_cmam_dashboard[1],
+    to = "docs/grand_bassa_cmam_dashboard.html"
+  ),
   cmam_coverage_dashboard_deployed = deploy_cmam_dashboard(
-    from = cmam_coverage_dashboard[1],
-    to = "docs/cmam_coverage_dashboard.html"
+    from = c(
+      cmam_coverage_dashboard[1], 
+      urban_montserrado_cmam_dashboard[1],
+      grand_bassa_cmam_dashboard[1]
+    )
   )
 )
 

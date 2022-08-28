@@ -1,0 +1,190 @@
+---
+title: "CMAM Coverage Dashboard"
+author: "University of Liberia School of Public Health Research Team" 
+date: "2022-08-28"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    navbar:
+      - { title: "Home", href: "cmam_coverage_dashboard.html", align: left }
+      - { title: "Urban Montserrado", href: "urban_montserrado_cmam.html", align: left }
+      - { title: "Grand Bassa", href: "grand_bassa_cmam.html", align: left }
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages(source(here::here("packages.R")))
+for (f in list.files(here::here("R"), full.names = TRUE)) source (f)
+
+targets::tar_load(
+  c(
+    lbr_counties, lbr_districts, lbr_clans,
+    urban_montserrado, grand_bassa,
+    urban_montserrado_cmam_coverage, grand_bassa_cmam_coverage
+  )
+)
+```
+
+Row {.tabset .tabset-fade}
+--------------------------------------------------------------------------------
+
+```{r grand_bassa_coverage}
+pal <- colorNumeric(
+  palette = brewer.pal(n = 10, name = "RdYlGn"), domain = c(0, 1)
+)
+
+y <- grand_bassa_cmam_coverage
+
+leaflet(data = y, width = "100%", height = "100%") |>
+  addMapboxTiles(
+    style_id = "streets-v10",
+    username = "mapbox"
+  ) |>
+  setView(
+    lng = mean(st_bbox(grand_bassa)[c(1, 3)]), 
+    lat = mean(st_bbox(grand_bassa)[c(2, 4)]),
+    zoom = 10
+  ) |>
+  addPolygons(
+    fillColor = ~pal(muac_screen),
+    weight = 1,
+    opacity = 1,
+    color = ~pal(muac_screen),
+    dashArray = "",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = paste0(
+      "Clan: ", y$CLNAME, 
+      "; MUAC screening: ", round(y$muac_screen * 100, digits = 1), "%"
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "MUAC Screening"
+  ) |>
+  addPolygons(
+    fillColor = ~pal(oedema_screen),
+    weight = 1,
+    opacity = 1,
+    color = ~pal(oedema_screen),
+    dashArray = "",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = paste0(
+      "Clan: ", y$CLNAME, 
+      "; Oedema screening: ", round(y$oedema_screen * 100, digits = 1), "%"
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Oedema Screening"
+  ) |>
+  addPolygons(
+    fillColor = ~pal(case_finding),
+    weight = 1,
+    opacity = 1,
+    color = ~pal(case_finding),
+    dashArray = "",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = paste0(
+      "Clan: ", y$CLNAME, 
+      "; Case-finding effectiveness: ", round(y$case_finding * 100, digits = 1), "%"
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Case-finding Effectiveness"
+  ) |>
+  addPolygons(
+    fillColor = ~pal(treatment),
+    weight = 1,
+    opacity = 1,
+    color = ~pal(treatment),
+    dashArray = "",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = paste0(
+      "Clan: ", y$CLNAME, 
+      "; MUAC screening: ", round(y$treatment * 100, digits = 1), "%"
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Treatment Coverage"
+  ) |>
+  addCircleMarkers(
+    data = liberia::settlements,
+    radius = 3,
+    fillColor = "blue",
+    weight = 1,
+    opacity = 1,
+    color = "blue",
+    dashArray = "",
+    fillOpacity = 0.7,
+    label = paste0(
+      "Settlement/Village: ", liberia::settlements$FNAME, 
+      "; County: ", liberia::settlements$admin1Name,
+      "; District: ", liberia::settlements$admin2Name
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Settlements/Villages"
+  ) |>
+  addLegend(
+    pal = pal,
+    opacity = 0.7,
+    values = c(0, 1),
+    position = "bottomright",
+    labFormat = labelFormat(suffix = "%", transform = function(x) x * 100),
+    layerId = "legend"
+  ) |>
+  addLayersControl(
+		baseGroups = c("MUAC Screening", "Oedema Screening", 
+		               "Case-finding Effectiveness", "Treatment Coverage"),
+		overlayGroups = c("Settlements/Villages"),
+		position = "topright",
+		options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE)
+	) |>
+  htmlwidgets::onRender("
+    function(el, x) {
+      this.on('baselayerchange', function(e) {
+        e.layer.bringToBack();
+      })
+    }
+  ")
+```

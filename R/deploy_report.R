@@ -39,9 +39,21 @@ deploy_quality_report <- function(from = data_quality_report[1],
 #
 ################################################################################
 
-deploy_cmam_dashboard <- function(from = cmam_coverage_dashboard[1],
-                                   to = "docs/cmam_coverage_dashboard.html") {
+deploy_cmam_dashboard <- function(from = c(cmam_coverage_dashboard[1],
+                                           urban_montserrado_cmam_dashboard[1],
+                                           grand_bassa_cmam_dashboard[1])) {
+  to <- file.path("docs", basename(from))
+  
   file.copy(from = from, to = to, overwrite = TRUE)
   
-  to
+  dir.create("docs/fonts")
+  
+  file.copy(
+    from = "outputs/fonts",
+    to = "docs/fonts",
+    recursive = TRUE,
+    overwrite = TRUE
+  )
+  
+  to[1]
 }
