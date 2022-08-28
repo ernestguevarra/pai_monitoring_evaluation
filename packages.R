@@ -20,6 +20,9 @@ library(labelled)
 library(tidytext)
 library(RColorBrewer)
 library(flexdashboard)
+library(ggiraph)
+library(systemfonts)
+library(gfonts)
 
 
 ################################################################################
