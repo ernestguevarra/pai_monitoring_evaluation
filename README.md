@@ -13,3 +13,31 @@ This repository is a
 [`R`](https://cran.r-project.org/) workflow for the design, data
 management and analysis, and reporting for monitoring and evaluating the
 PAI project in Liberia.
+
+## Project files structure
+
+-   R
+
+-   auth
+
+-   data
+
+-   docs
+
+-   images
+
+-   outputs
+
+-   renv
+
+-   reports
+
+-   README.Rmd / README.md
+
+-   \_targets.R
+
+-   packages.R
+
+-   pai_monitoring_evaluation.Rproj
+
+-   renv.lock

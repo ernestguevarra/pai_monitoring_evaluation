@@ -19,6 +19,7 @@ library(blastula)
 library(labelled)
 library(tidytext)
 library(RColorBrewer)
+library(flexdashboard)
 
 
 ################################################################################
@@ -36,6 +37,7 @@ library(mapboxapi)
 library(googledrive)
 library(googlesheets4)
 library(bbw)
+library(leaflet)
 
 
 ################################################################################
