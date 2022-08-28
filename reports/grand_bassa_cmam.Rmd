@@ -6,9 +6,9 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     navbar:
-      - { title: "Home", href: "cmam_coverage_dashboard.html", align: left }
-      - { title: "Urban Montserrado", href: "urban_montserrado_cmam.html", align: left }
-      - { title: "Grand Bassa", href: "grand_bassa_cmam.html", align: left }
+      - { title: "Home", href: "cmam_coverage.html", align: left }
+      - { title: "Urban Montserrado Maps", href: "urban_montserrado_cmam.html", align: left }
+      - { title: "Grand Bassa Maps", href: "grand_bassa_cmam.html", align: left }
 ---
 
 ```{r setup, include=FALSE}

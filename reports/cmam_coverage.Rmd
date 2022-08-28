@@ -6,7 +6,7 @@ output:
   flexdashboard::flex_dashboard:
     #orientation: rows
     navbar:
-      - { title: "Home", href: "cmam_coverage_dashboard.html", align: left }
+      - { title: "Home", href: "cmam_coverage.html", align: left }
       - { title: "Urban Montserrado Maps", href: "urban_montserrado_cmam.html", align: left }
       - { title: "Grand Bassa Maps", href: "grand_bassa_cmam.html", align: left }
 ---
@@ -29,23 +29,23 @@ use_font(
   selector = ".dummy-selector"
 )
 
-# if (!font_family_exists("Open Sans")) {
-#   register_font(
-#     name = "Open Sans", 
-#     plain = list(
-#       "outputs/fonts/fonts/open-sans-v34-latin-regular.woff", 0
-#     ), 
-#     bold = list(
-#       "outputs/fonts/fonts/open-sans-v34-latin-700.woff", 0
-#     ), 
-#     italic = list(
-#       "outputs/fonts/fonts/open-sans-v34-latin-italic.woff", 0
-#     ),
-#     bolditalic = list(
-#       "outputs/fonts/fonts/open-sans-v34-latin-700italic.woff", 0
-#     )
-#   )
-# }
+if (!font_family_exists("Open Sans")) {
+  register_font(
+    name = "Open Sans",
+    plain = list(
+      "outputs/fonts/fonts/open-sans-v34-latin-regular.woff", 0
+    ),
+    bold = list(
+      "outputs/fonts/fonts/open-sans-v34-latin-700.woff", 0
+    ),
+    italic = list(
+      "outputs/fonts/fonts/open-sans-v34-latin-italic.woff", 0
+    ),
+    bolditalic = list(
+      "outputs/fonts/fonts/open-sans-v34-latin-700italic.woff", 0
+    )
+  )
+}
 
 targets::tar_load(
   c(
