@@ -1,0 +1,206 @@
+---
+title: "CMAM Coverage Dashboard"
+author: "University of Liberia School of Public Health Research Team" 
+date: "2022-08-28"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages(source(here::here("packages.R")))
+for (f in list.files(here::here("R"), full.names = TRUE)) source (f)
+
+targets::tar_load(
+  c(
+    lbr_counties, lbr_districts, lbr_clans,
+    urban_montserrado, grand_bassa,
+    urban_montserrado_cmam_coverage, grand_bassa_cmam_coverage
+  )
+)
+
+RdYlGn <- c("#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60", "#1a9850")
+
+YlOrRd <- c("#ffffb2", "#fed976", "#feb24c", "#fd8d3c", "#fc4e2a", "#e31a1c",
+"#b10026")
+
+get_div_colours <- colorRampPalette(colors = RdYlGn, space = "Lab")
+get_seq_colours <- colorRampPalette(colors = YlOrRd, space = "Lab")
+
+col_palette <- get_div_colours(n = 101)
+seq_palette <- get_seq_colours(n = 101)
+
+mapbox.street <- "https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXJuZXN0Z3VldmFycmEiLCJhIjoiejRRLXlZdyJ9.sqS1zi0rDH5CIzvcn9SXSg"
+```
+
+Urban Montserrado
+================================================================================
+
+Row {.tabset .tabset-fade}
+--------------------------------------------------------------------------------
+
+```{r gm_coverage}
+pal <- colorNumeric(
+  palette = brewer.pal(n = 10, name = "RdYlGn"), domain = c(0, 1)
+)
+
+x <- urban_montserrado_cmam_coverage
+
+leaflet(width = "100%", height = "100%") |>
+  addMapboxTiles(
+    style_id = "streets-v10",
+    username = "mapbox"
+  ) |>
+  setView(
+    lng = mean(st_bbox(urban_montserrado)[c(1, 3)]), 
+    lat = mean(st_bbox(urban_montserrado)[c(2, 4)]),
+    zoom = 12
+  ) |>
+  addPolygons(
+    data = x,
+    fillColor = pal(x$muac_screen),
+    weight = 1,
+    opacity = 1,
+    color = pal(x$muac_screen),
+    dashArray = "",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = paste0(
+      "Clan: ", x$CLNAME, 
+      "; MUAC screening: ", round(x$muac_screen * 100, digits = 1), "%"
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "MUAC Screening"
+  ) |>
+    addPolygons(
+    data = x,
+    fillColor = pal(x$oedema_screen),
+    weight = 1,
+    opacity = 1,
+    color = pal(x$oedema_screen),
+    dashArray = "",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = paste0(
+      "Clan: ", x$CLNAME, 
+      "; MUAC screening: ", round(x$oedema_screen * 100, digits = 1), "%"
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Oedema Screening"
+  ) |>
+    addPolygons(
+    data = x,
+    fillColor = pal(x$case_finding),
+    weight = 1,
+    opacity = 1,
+    color = pal(x$case_finding),
+    dashArray = "",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = paste0(
+      "Clan: ", x$CLNAME, 
+      "; MUAC screening: ", round(x$case_finding * 100, digits = 1), "%"
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Case-finidng Effectiveness"
+  ) |>
+    addPolygons(
+    data = x,
+    fillColor = pal(x$treatment),
+    weight = 1,
+    opacity = 1,
+    color = pal(x$treatment),
+    dashArray = "",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = paste0(
+      "Clan: ", x$CLNAME, 
+      "; MUAC screening: ", round(x$treatment * 100, digits = 1), "%"
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Treatment Coverage"
+  ) |>
+  addCircleMarkers(
+    data = liberia::settlements,
+    radius = 5,
+    fillColor = "blue",
+    weight = 1,
+    opacity = 1,
+    color = "blue",
+    dashArray = "",
+    fillOpacity = 0.7,
+    # highlight = highlightOptions(
+    #   weight = 3,
+    #   color = "#666",
+    #   dashArray = "",
+    #   fillOpacity = 0.7,
+    #   bringToFront = TRUE
+    # ),
+    label = paste0(
+      "Settlement/Village: ", liberia::settlements$FNAME, 
+      "; County: ", liberia::settlements$admin1Name,
+      "; District: ", liberia::settlements$admin2Name
+    ),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Settlements/Villages"
+  ) |>
+  addLegend(
+    pal = pal,
+    opacity = 0.7,
+    values = c(0, 1),
+    position = "bottomright",
+    labFormat = labelFormat(suffix = "%", transform = function(x) x * 100),
+    layerId = "legend"
+  ) %>%
+  addLayersControl(
+		baseGroups = c("MUAC Screening", "Oedema Screening", 
+		               "Case-finding Effectiveness", "Treatment Coverage"),
+		overlayGroups = c("Settlements/Villages"),
+		position = "topright",
+		options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE)
+	)
+```

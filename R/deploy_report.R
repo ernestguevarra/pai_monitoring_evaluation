@@ -29,3 +29,19 @@ deploy_quality_report <- function(from = data_quality_report[1],
   to
 }
 
+
+
+################################################################################
+#
+#'
+#' Deploy CMAM dashboard
+#'
+#
+################################################################################
+
+deploy_cmam_dashboard <- function(from = cmam_coverage_dashboard[1],
+                                   to = "docs/cmam_coverage_dashboard.html") {
+  file.copy(from = from, to = to, overwrite = TRUE)
+  
+  to
+}

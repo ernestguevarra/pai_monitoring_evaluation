@@ -505,6 +505,21 @@ analysis <- tar_plan(
   )
 )
 
+mapping <- tar_plan(
+  urban_montserrado_cmam_coverage = create_int_maps(
+    urban_montserrado_int_grid, 
+    urban_montserrado_ea,
+    urban_montserrado_screening_int, 
+    urban_montserrado_cmam_int
+  ),
+  grand_bassa_cmam_coverage = create_int_maps(
+    grand_bassa_int_grid,
+    grand_bassa_ea,
+    grand_bassa_screening_int,
+    grand_bassa_cmam_int
+  )
+)
+
 
 ## Outputs
 outputs <- tar_plan(
@@ -583,6 +598,12 @@ reports <- tar_plan(
     path = "reports/final_results_report.Rmd",
     output_dir = "outputs",
     knit_root_dir = here::here()
+  ),
+  tar_render(
+    name = cmam_coverage_dashboard,
+    path = "reports/cmam_coverage_dashboard.Rmd",
+    output_dir = "outputs",
+    knit_root_dir = here::here()
   )
 )
 
@@ -602,6 +623,10 @@ deploy <- tar_plan(
     attachment = survey_progress_report[1],
     sender = Sys.getenv("GMAIL_USERNAME"),
     recipient = eval(parse(text = Sys.getenv("REPORT_RECIPIENTS")))
+  ),
+  cmam_coverage_dashboard_deployed = deploy_cmam_dashboard(
+    from = cmam_coverage_dashboard[1],
+    to = "docs/cmam_coverage_dashboard.html"
   )
 )
 
@@ -616,6 +641,7 @@ list(
   data_checks,
   data_processed,
   analysis,
+  mapping,
   outputs,
   reports,
   deploy
