@@ -1,18 +1,18 @@
-name: run S3M workflow
+name: deploy S3M dashboard
 
 on:
-  # push:
-  #   branches: [main, master]
-  # pull_request:
-  #   branches: [main, master]
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
   workflow_dispatch:
     branches:
       - '*'
 
 jobs:
-  run-S3M-workflow:
+  deploy-S3M-dashboard:
     runs-on: ubuntu-latest
-    container: rocker/geospatial:4.2.0
+    container: rocker/geospatial:4.2.1
     env:
       GIT_CRYPT_KEY64: ${{ secrets.GIT_CRYPT_KEY64 }}
     steps:
@@ -22,7 +22,7 @@ jobs:
         run: |
           apt-get update && apt-get install -y --no-install-recommends \
           git-crypt libxt6 libglpk-dev
-
+          
       - name: Trust repo
         run: |
           git config --global --add safe.directory /__w/pai_monitoring_evaluation/pai_monitoring_evaluation
@@ -44,8 +44,23 @@ jobs:
           renv::restore()
         shell: Rscript {0}
         
-      - name: Run workflow
+      - name: Produce CMAM coverage dashboard outputs
         run: |
-          targets::tar_make(study_design_report)
+          targets::tar_make(cmam_coverage_dashboard)
+          targets::tar_make(urban_montserrado_cmam.html)
+          targets::tar_make(grand_bassa_cmam.html)
         shell: Rscript {0}
           
+      - name: Deploy CMAM coverage dashboard
+        run: |
+          targets::tar_make(cmam_coverage_dashboard_deployed)
+        shell: Rscript {0}
+        
+      - name: Commit and push files
+        run: |
+          git config --global user.email "ernest@guevarra.io"
+          git config --global user.name "ernestguevarra"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "deploy final results report"
+          git push
+      

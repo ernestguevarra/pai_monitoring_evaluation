@@ -1,12 +1,12 @@
 name: monitor survey progress
 
 on:
-  # push:
-  #   branches: [main, master]
-  # pull_request:
-  #   branches: [main, master]
-  schedule:
-    - cron: "0 20 * * *"
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  # schedule:
+  #   - cron: "0 20 * * *"
   workflow_dispatch:
     #branches:
     #  - '*'

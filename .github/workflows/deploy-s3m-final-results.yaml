@@ -1,16 +1,16 @@
-name: test S3M workflow
+name: deploy S3M final results
 
 on:
-  # push:
-  #   branches: [main, master]
-  # pull_request:
-  #   branches: [main, master]
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
   workflow_dispatch:
     branches:
       - '*'
 
 jobs:
-  test-S3M-workflow:
+  deploy-S3M-final-results:
     runs-on: ubuntu-latest
     container: rocker/geospatial:4.2.1
     env:
@@ -44,8 +44,20 @@ jobs:
           renv::restore()
         shell: Rscript {0}
         
-      - name: Run workflow
+      - name: Produce final results report
         run: |
-          targets::tar_make(dplyr::contains("deployed"))
+          targets::tar_make(final_results_report)
         shell: Rscript {0}
-          
+        
+      - name: Deploy final results report
+        run: |
+          targets::tar_make(final_results_deployed)
+        shell: Rscript {0}
+
+      - name: Commit and push files
+        run: |
+          git config --global user.email "ernest@guevarra.io"
+          git config --global user.name "ernestguevarra"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "deploy final results report"
+          git push
