@@ -602,7 +602,7 @@ reports <- tar_plan(
   ),
   tar_render(
     name = cmam_coverage_dashboard,
-    path = "reports/cmam_coverage.Rmd",
+    path = "reports/cmam_coverage_dashboard.Rmd",
     output_dir = "outputs",
     knit_root_dir = here::here()
   ),
