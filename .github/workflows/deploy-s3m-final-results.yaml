@@ -54,10 +54,3 @@ jobs:
           targets::tar_make(final_results_deployed)
         shell: Rscript {0}
 
-      - name: Commit and push files
-        run: |
-          git config --global user.email "ernest@guevarra.io"
-          git config --global user.name "ernestguevarra"
-          git add .
-          git diff-index --quiet HEAD || git commit -m "deploy final results report"
-          git push
