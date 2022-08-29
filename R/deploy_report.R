@@ -17,6 +17,23 @@ deploy_progress_report <- function(from = survey_progress_report[1],
 ################################################################################
 #
 #'
+#' Deploy survey progress report
+#'
+#
+################################################################################
+
+deploy_final_results <- function(from = final_results_report[1],
+                                 to = "docs/final_results_report.html") {
+  file.copy(from = from, to = to, overwrite = TRUE)
+  
+  to
+}
+
+
+
+################################################################################
+#
+#'
 #' Deploy data quality report
 #'
 #
@@ -46,14 +63,16 @@ deploy_cmam_dashboard <- function(from = c(cmam_coverage_dashboard[1],
   
   file.copy(from = from, to = to, overwrite = TRUE)
   
-  dir.create("docs/fonts")
-  
-  file.copy(
-    from = "outputs/fonts",
-    to = "docs/fonts",
-    recursive = TRUE,
-    overwrite = TRUE
-  )
+  if (!dir.exists("docs/fonts")) {
+    dir.create("docs/fonts")
+    
+    file.copy(
+      from = "outputs/fonts",
+      to = "docs/fonts",
+      recursive = TRUE
+    )
+  }
   
   to[1]
 }
+

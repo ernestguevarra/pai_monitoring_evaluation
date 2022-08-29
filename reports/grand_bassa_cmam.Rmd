@@ -134,6 +134,7 @@ leaflet(data = y, width = "100%", height = "100%") |>
       bringToFront = TRUE
     ),
     label = paste0(
+      "District: ", y$DNAME,
       "Clan: ", y$CLNAME, 
       "; MUAC screening: ", round(y$treatment * 100, digits = 1), "%"
     ),
