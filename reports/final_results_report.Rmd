@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
   echo = FALSE,
   collapse = TRUE,
   comment = "#>",
-  fig.path = here::here("figures/")
+  fig.path = here::here("outputs/figures/")
 )
 
 suppressPackageStartupMessages(source("packages.R"))

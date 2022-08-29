@@ -56,3 +56,13 @@ jobs:
           targets::tar_make(cmam_coverage_dashboard_deployed)
         shell: Rscript {0}
         
+      - name: Deploy CMAM coverage dashboard to Shared Google Drive
+        run: |
+          targets::tar_make(cmam_coverage_dashboard_gdrive_deployed)
+        shell: Rscript {0}
+        
+      - name: Email CMAM coverage dashboard Google Drive link
+        run: |
+          targets::tar_make(coverage_dashboard_emailed)
+        shell: Rsript {0}
+        
