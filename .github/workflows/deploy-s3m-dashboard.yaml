@@ -47,8 +47,8 @@ jobs:
       - name: Produce CMAM coverage dashboard outputs
         run: |
           targets::tar_make(cmam_coverage_dashboard)
-          targets::tar_make(urban_montserrado_cmam.html)
-          targets::tar_make(grand_bassa_cmam.html)
+          targets::tar_make(urban_montserrado_cmam)
+          targets::tar_make(grand_bassa_cmam)
         shell: Rscript {0}
           
       - name: Deploy CMAM coverage dashboard
@@ -61,6 +61,6 @@ jobs:
           git config --global user.email "ernest@guevarra.io"
           git config --global user.name "ernestguevarra"
           git add .
-          git diff-index --quiet HEAD || git commit -m "deploy final results report"
+          git diff-index --quiet HEAD || git commit -m "deploy s3m dashboard"
           git push
       
