@@ -354,7 +354,7 @@ analysis <- tar_plan(
     point_grid = grand_bassa_int_points,
     idp = 2
   ),
-  wasting_bootstrap = boot_estimates(
+  wasting_bootstraps = boot_estimates(
     .data = list(urban_montserrado_anthro_df, grand_bassa_anthro_df),
     w = list(urban_montserrado_ea_population, grand_bassa_ea_population),
     vars = c("gam", "mam", "sam", "oedema"),
@@ -617,6 +617,25 @@ reports <- tar_plan(
     path = "reports/grand_bassa_cmam.Rmd",
     output_dir = "outputs",
     knit_root_dir = here::here()
+  ),
+  tar_target(
+    name = cmam_coverage_dashboard_zipped,
+    command = {
+      zip(
+        zipfile = "outputs/cmam_coverage_dashboard.zip",
+        files = c(
+          cmam_coverage_dashboard[1], 
+          urban_montserrado_cmam_dashboard[1], 
+          grand_bassa_cmam_dashboard[1]
+        ),
+        flags = "-j"
+      )
+      "outputs/cmam_coverage_dashboard.zip"
+    }
+  ),
+  email_dashboard_message = blastula::render_email(
+    input = "reports/email_cmam_coverage_dashboard.Rmd",
+    render_options = list(knit_root_dir = here::here())
   )
 )
 
@@ -651,6 +670,16 @@ deploy <- tar_plan(
       urban_montserrado_cmam_dashboard[1],
       grand_bassa_cmam_dashboard[1]
     )
+  ),
+  cmam_coverage_dashboard_gdrive_deployed = deploy_to_googledrive(
+    media = cmam_coverage_dashboard_zipped,
+    path = "PoN Project/Reports/",
+    name = basename(cmam_coverage_dashboard_zipped)
+  ),
+  coverage_dashboard_emailed = email_coverage_dashboard(
+    message = email_dashboard_message,
+    sender = Sys.getenv("GMAIL_USERNAME"),
+    recipient = eval(parse(text = Sys.getenv("REPORT_RECIPIENTS")))
   )
 )
 

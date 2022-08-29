@@ -1,0 +1,45 @@
+---
+title: CMAM Coverage Dashboard
+output: blastula::blastula_email
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  error = FALSE,
+  echo = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = here::here("outputs/figures/")
+)
+
+suppressPackageStartupMessages(source(here::here("packages.R")))
+for (f in list.files(here::here("R"), full.names = TRUE)) source (f)
+
+targets::tar_load(cmam_coverage_dashboard_gdrive_deployed)
+```
+
+Here is a Google Drive link to access/download a zipped copy of the CMAM Coverage Dashboard from the shared Google Drive folder *PoN Project*
+
+`r cmam_coverage_dashboard_gdrive_deployed[[2]]`
+
+To access the CMAM Coverage Dashboard:
+
+1. Download the `cmam_coverage_dashboard.zip` file from the link above.
+
+2. Unzip the contents of the zip file. You will get the following files:
+
+    * cmam_coverage_dashboard.html
+    
+    * urban_montserrado_cmam.html
+    
+    * grand_bassa_cmam.html
+    
+3. Double-click or open the `cmam_coverage_dashboard.html` file using your computer's browser. You should now be able to view the dashboard even without internet access. If you are not on the internet, the base map (similar to a Google map) will not show but the borders of the indicator maps will still be shown.
+
+You can view the same report online at https://ernest.guevarra.io/pai_monitoring_evaluation/cmam_coverage_dashboard.html
+
+
+Best,    
+Ernest
