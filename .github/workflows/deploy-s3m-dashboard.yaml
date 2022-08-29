@@ -64,5 +64,5 @@ jobs:
       - name: Email CMAM coverage dashboard Google Drive link
         run: |
           targets::tar_make(coverage_dashboard_emailed)
-        shell: Rsript {0}
+        shell: Rscript {0}
         
