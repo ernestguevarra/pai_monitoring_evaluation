@@ -25,7 +25,8 @@ suppressPackageStartupMessages(source("packages.R"))
 for (f in list.files(here::here("R"), full.names = TRUE)) source (f)
 
 targets::tar_load(
-  c(urban_montserrado, grand_bassa,
+  c(lbr_districts, 
+    urban_montserrado, grand_bassa,
     urban_montserrado_int_grid, grand_bassa_int_grid,
     urban_montserrado_cmam_df, grand_bassa_cmam_df,
     urban_montserrado_cmam_int, grand_bassa_cmam_int,
@@ -50,6 +51,9 @@ targets::tar_load(
     wasting_bootstraps
   )
 )
+
+gb_districts <- lbr_districts |>
+  subset(admin1Name == "Grand Bassa")
 
 RdYlGn <- c("#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60", "#1a9850")
 
@@ -355,6 +359,270 @@ plot(
 )
 ```
 
+#### Commonwealth
+
+```{r case-finding-commonwealth, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "Commonwealth2")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "Commonwealth2") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### District 1
+
+```{r case-finding-district1, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "District # 1")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "District # 1") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### District 2
+
+```{r case-finding-district2, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "District # 2")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "District # 2") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### District 3
+
+```{r case-finding-district3, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "District # 3")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "District # 3") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### District 4
+
+```{r case-finding-district4, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "District # 4")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "District # 4") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### Neekreen
+
+```{r case-finding-neekreen, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "Neekreen")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "Neekreen") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### Owensgrove
+
+```{r case-finding-owensgrove, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "Owensgrove")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "Owensgrove") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### St. John River City
+
+```{r case-finding-stjohn-river-city, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "St. John River City")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "St. John River City") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["case_finding"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
 ### Treatment coverage
 
 ```{r treatment, fig.show = "hold", out.width = "50%"}
@@ -377,6 +645,270 @@ plot(
   breaks = "equal",
   key.pos = 4,
   lty = 0
+)
+```
+
+#### Commonwealth
+
+```{r treatment-commonwealth, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "Commonwealth2")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "Commonwealth2") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### District 1
+
+```{r treatmen-district1, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "District # 1")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "District # 1") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### District 2
+
+```{r treatment-district2, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "District # 2")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "District # 2") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### District 3
+
+```{r treatment-district3, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "District # 3")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "District # 3") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### District 4
+
+```{r treatmen-district4, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "District # 4")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "District # 4") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### Neekreen
+
+```{r treatment-neekreen, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "Neekreen")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "Neekreen") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### Owensgrove
+
+```{r treatment-owensgrove, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "Owensgrove")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "Owensgrove") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
+)
+```
+
+#### St. John River City
+
+```{r treatment-river-city, fig.align = "center"}
+z <- sf::st_intersection(
+  y, gb_districts |> subset(admin2Name == "St. John River City")
+)
+
+par(mar = c(0,0,0,0))
+
+plot(gb_districts |> 
+       subset(admin2Name == "St. John River City") |>
+       sf::st_geometry(), 
+     lty = 0)
+
+plot(
+  x = z["treatment"],
+  main = NULL,
+  pal = col_palette,
+  nbreaks = 101,
+  breaks = "equal",
+  key.pos = 4,
+  lty = 0,
+  add = TRUE
+)
+
+plot(
+  gb_districts |> 
+    sf::st_geometry(), 
+  lwd = 4,
+  add = TRUE
 )
 ```
 
