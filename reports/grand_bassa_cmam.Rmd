@@ -32,6 +32,9 @@ pal <- colorNumeric(
   palette = brewer.pal(n = 10, name = "RdYlGn"), domain = c(0, 1)
 )
 
+gb_districts <- lbr_districts |>
+  subset(admin1Name == "Grand Bassa")
+
 y <- grand_bassa_cmam_coverage
 
 leaflet(data = y, width = "100%", height = "100%") |>
@@ -58,10 +61,12 @@ leaflet(data = y, width = "100%", height = "100%") |>
       fillOpacity = 0.7,
       bringToFront = TRUE
     ),
-    label = paste0(
-      "Clan: ", y$CLNAME, 
-      "; MUAC screening: ", round(y$muac_screen * 100, digits = 1), "%"
-    ),
+    label = ~paste0(
+      "District: ", DNAME,
+      "<br/>Clan: ", CLNAME, 
+      "<br/>MUAC screening: ", round(muac_screen * 100, digits = 1), "%"
+    ) |>
+      lapply(htmltools::HTML),
     labelOptions = labelOptions(
       style = list("font-weight" = "normal", padding = "3px 8px"),
       textsize = "12px",
@@ -83,10 +88,12 @@ leaflet(data = y, width = "100%", height = "100%") |>
       fillOpacity = 0.7,
       bringToFront = TRUE
     ),
-    label = paste0(
-      "Clan: ", y$CLNAME, 
-      "; Oedema screening: ", round(y$oedema_screen * 100, digits = 1), "%"
-    ),
+    label = ~paste0(
+      "District: ", DNAME,
+      "<br/>Clan: ", CLNAME, 
+      "<br/>Oedema screening: ", round(oedema_screen * 100, digits = 1), "%"
+    ) |>
+      lapply(htmltools::HTML),
     labelOptions = labelOptions(
       style = list("font-weight" = "normal", padding = "3px 8px"),
       textsize = "12px",
@@ -108,10 +115,12 @@ leaflet(data = y, width = "100%", height = "100%") |>
       fillOpacity = 0.7,
       bringToFront = TRUE
     ),
-    label = paste0(
-      "Clan: ", y$CLNAME, 
-      "; Case-finding effectiveness: ", round(y$case_finding * 100, digits = 1), "%"
-    ),
+    label = ~paste0(
+      "District: ", DNAME,
+      "<br/>Clan: ", CLNAME, 
+      "<br/>Case-finding effectiveness: ", round(case_finding * 100, digits = 1), "%"
+    ) |>
+      lapply(htmltools::HTML),
     labelOptions = labelOptions(
       style = list("font-weight" = "normal", padding = "3px 8px"),
       textsize = "12px",
@@ -133,17 +142,32 @@ leaflet(data = y, width = "100%", height = "100%") |>
       fillOpacity = 0.7,
       bringToFront = TRUE
     ),
-    label = paste0(
-      "District: ", y$DNAME,
-      "Clan: ", y$CLNAME, 
-      "; MUAC screening: ", round(y$treatment * 100, digits = 1), "%"
-    ),
+    label = ~paste0(
+      "District: ", DNAME,
+      "<br/>Clan: ", CLNAME, 
+      "<br/>Treatment coverage: ", round(treatment * 100, digits = 1), "%"
+    ) |>
+      lapply(htmltools::HTML),
     labelOptions = labelOptions(
       style = list("font-weight" = "normal", padding = "3px 8px"),
       textsize = "12px",
       direction = "auto"
     ),
     group = "Treatment Coverage"
+  ) |>
+  addPolygons(
+    data = gb_districts,
+    fill = FALSE,
+    weight = 3,
+    opacity = 1,
+    color = "#808080",
+    label = paste0("District: ", gb_districts$admin2NAME),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "12px",
+      direction = "auto"
+    ),
+    group = "Grand Bassa Districts"
   ) |>
   addCircleMarkers(
     data = liberia::settlements,
@@ -156,9 +180,10 @@ leaflet(data = y, width = "100%", height = "100%") |>
     fillOpacity = 0.7,
     label = paste0(
       "Settlement/Village: ", liberia::settlements$FNAME, 
-      "; County: ", liberia::settlements$admin1Name,
-      "; District: ", liberia::settlements$admin2Name
-    ),
+      "<br/>County: ", liberia::settlements$admin1Name,
+      "<br/>District: ", liberia::settlements$admin2Name
+    ) |>
+      lapply(htmltools::HTML),
     labelOptions = labelOptions(
       style = list("font-weight" = "normal", padding = "3px 8px"),
       textsize = "12px",
@@ -177,7 +202,7 @@ leaflet(data = y, width = "100%", height = "100%") |>
   addLayersControl(
 		baseGroups = c("MUAC Screening", "Oedema Screening", 
 		               "Case-finding Effectiveness", "Treatment Coverage"),
-		overlayGroups = c("Settlements/Villages"),
+		overlayGroups = c("Grand Bassa Districts", "Settlements/Villages"),
 		position = "topright",
 		options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE)
 	) |>
